@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>The Mormon Trail: Zion or Bust!</title>
 <style>
 :root{font-family:"Courier New",monospace;color:#f2dfae;background:#181c18}*{box-sizing:border-box}body{margin:0;padding:20px}main{max-width:1000px;margin:auto}h1{text-align:center;color:#f4c66d;text-shadow:3px 3px #65462d;margin-bottom:4px}header p{text-align:center;margin-top:0;color:#c1bb9e}.panel{background:#252b22;border:3px solid #977b4a;box-shadow:5px 5px #111;padding:15px;margin:15px 0}button,select,input{font:inherit}button{background:#433b29;color:#ffe1a1;border:2px solid #c59e58;padding:10px;cursor:pointer;margin:3px}button:hover,button:focus{background:#695234}button:disabled{opacity:.35;cursor:default}input,select{background:#131a17;color:#fff0c7;border:1px solid #ab956d;padding:8px;max-width:100%}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.stat{background:#171d17;padding:10px;text-align:center}.stat strong{display:block;color:#ffdb88;font-size:1.15em}#scene{width:100%;height:auto;image-rendering:pixelated;border:3px solid #a78b5a;background:#80abc0}#log{max-height:210px;overflow:auto;line-height:1.6}#log p{border-bottom:1px dotted #665a43;padding-bottom:6px}#actions{display:flex;flex-wrap:wrap}small{color:#c2baa0}.hidden{display:none!important}#map{font-size:.85rem;color:#e6d3a5;line-height:1.6}@media(max-width:600px){body{padding:8px}.grid{grid-template-columns:repeat(2,1fr)}button{flex:1 1 42%}h1{font-size:1.6rem}#actions button{flex:1 1 42%}}
@@ -80,6 +80,30 @@ header p{color:#f7d28a}
  #gameControls #travelPanel .panel{margin:4px 0}
  #gameControls #travelPanel #actions button{min-height:34px}
  #gameControls #stats .stat{font-size:.62rem;padding:3px 1px}
+}
+
+/* Modern Adventure: iteration 1 - screen-fit foundation */
+:root{--pine:#163d3d;--gold:#f3be67;--cream:#fff4db;--glass:#153c3bd9}
+html,body{overscroll-behavior:none}
+button,input,select{touch-action:manipulation}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #fff5b7;outline-offset:2px}
+@media(max-width:700px){
+body:has(#game:not(.hidden)) main{height:100dvh;overflow:hidden}
+#game:not(.hidden){height:100dvh}
+#game #scene{height:clamp(125px,25dvh,230px);min-height:0;max-height:none;flex:0 0 25dvh}
+#gameControls{padding:5px 8px max(9px,env(safe-area-inset-bottom));gap:0}
+#gameTabs{margin:0 0 5px}
+#gameTabs button{min-height:38px}
+#travelPanel{display:flex;flex-direction:column;gap:5px}
+#travelPanel .panel{margin:0;padding:7px 9px}
+#travelPanel #stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:3px;gap:3px}
+#travelPanel #stats .stat{min-width:0;padding:3px 1px;font-size:clamp(9px,2.3vw,12px)}
+#travelPanel #stats .stat strong{font-size:clamp(11px,3vw,16px)}
+#travelPanel #map{font-size:clamp(10px,2.4vw,12px);margin:3px 0}
+#travelPanel #eventTitle{font-size:clamp(15px,4vw,20px);margin:2px 0}
+#travelPanel #story{font-size:clamp(12px,3.1vw,15px);line-height:1.28;margin:4px 0 7px}
+#travelPanel #actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+#travelPanel #actions button{min-height:38px;padding:5px 4px;font-size:clamp(11px,3vw,14px)}
 }
 </style></head><body><main><header><h1>THE MORMON TRAIL</h1><p>✦ ZION OR BUST! ✦</p></header>
 <div class="soundbar"><button id="globalMusic" type="button">♪ Start Music</button><button id="soundTest" type="button">Test Sound</button><label>Volume <input id="volume" type="range" min="0" max="100" value="85"></label><span id="soundStatus" role="status">Music starts after tapping Play</span></div><section id="setup" class="panel"><div class="hero-art" role="img" aria-label="Illustrated covered wagon and pioneer handcart crossing a mountain valley"><div class="hero-sky"><span class="hero-sun"></span><span class="hero-mountain mountain-back"></span><span class="hero-mountain mountain-front"></span><span class="hero-wagon">🐂 🛖</span><span class="hero-cart">🚶 🛒</span></div><div class="hero-wordmark">THE MORMON TRAIL<strong>ZION OR BUST!</strong></div></div><div class="setup-content"><h2>Outfit Your Company · Nauvoo, 1846</h2><p>Lead your fictional pioneer company toward the Salt Lake Valley. Manage food, supplies, health, and morale. The historical landmarks are real; your adventures are original.</p><p><label>Captain's name <input id="captain" maxlength="28" value="Captain Jensen"></label></p><p><label>Difficulty <select id="difficulty"><option value="easy">Sunday Stroll</option><option value="normal" selected>Pioneer Spirit</option><option value="hard">Zion or Bust!</option></select></label></p><p><label>Starting outfit <select id="outfit"><option value="balanced">Balanced — food, tools, and medicine</option><option value="provisions">Provision-heavy — more food, fewer repairs</option><option value="tools">Prepared — more tools and medicine, less food</option></select></label></p><p><strong>Surprise pioneer company!</strong> Your profession, family members, starting wealth, and transportation are assigned randomly. Families without enough money for a wagon outfit travel by handcart.</p><p id="randomPreview">Discover your family's circumstances when you begin.</p><button id="start">Visit the General Store</button><button id="loadStart">Load Saved Journey</button></div></section>

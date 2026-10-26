@@ -526,7 +526,7 @@ function save(){if(!state)return;try{localStorage.setItem(SAVE,JSON.stringify(st
 function load(){try{let s=JSON.parse(localStorage.getItem(SAVE));if(!s||!Array.isArray(s.journal)||typeof s.miles!=="number")throw Error();state=s;normalizeCompany();log("Resumed saved journey.");controls()}catch(e){alert("No valid saved journey was found.")}}
 let audioCtx=null,musicOn=false,musicTimer=null,noteIndex=0,currentCue="title",masterGain=null;
 const soundtracks={
- title:{name:"Come, Come, Ye Saints · Western Fiddle Overture",tempo:245,notes:[67,67,69,71,72,71,69,67,64,67,69,67,64,62,67,null,67,69,71,74,72,71,69,67,69,71,72,69,67,62,67,null],chords:[[55,59,62],[50,54,57],[48,52,55],[55,59,62]],lead:"fiddle"},
+ title:{name:"Come, Come, Ye Saints · Western Fiddle",tempo:235,notes:[60,60,62,64,60,59,60,62,64,65,64,60,62,60,59,60,60,60,62,64,60,59,60,62,64,65,64,60,62,60,59,60,64,65,67,67,67,65,64,65,64,65,65,65,64,62,64,64,67,65,64,62,62,62,55,60,59,60,62,64,65,67,64,60,62,60,59,60],durations:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1.5,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1.5,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1.5,2,1,1,1,1,1,1,1,1,1,1,1,1,1.5,2],chords:[[48,52,55],[55,59,62],[53,57,60],[48,52,55]],lead:"fiddle"},
  story:{name:"Farewell to Nauvoo · Hymn-Inspired",tempo:420,notes:[67,69,72,71,69,67,64,null,65,67,69,72,71,69,67,null],chords:[[48,52,55],[45,48,52],[53,57,60],[55,59,62]],lead:"flute"},
  store:{name:"The Nauvoo Mercantile · Folk Dance",tempo:240,notes:[67,72,76,72,69,72,76,72,67,71,74,71,65,69,72,null],chords:[[48,52,55],[53,57,60],[55,59,62],[48,52,55]],lead:"pluck"},
  travel:{name:"Frontier Journey · Orchestral",tempo:245,notes:[64,67,69,72,71,69,67,64,62,64,67,69,67,64,62,60],chords:[[48,52,55],[53,57,60],[55,59,62],[48,52,55]],lead:"horn"},
@@ -565,7 +565,7 @@ function musicTick(){
  if(!musicOn||!audioCtx)return;
  const cue=soundtracks[currentCue],i=noteIndex++,step=cue.tempo/1000,t=audioCtx.currentTime+.025;
  const chord=cue.chords[Math.floor(i/4)%cue.chords.length];
- instrument(cue.notes[i%cue.notes.length],t,step*.9,cue.lead,cue.lead==="fiddle"?.024:.033);
+ instrument(cue.notes[i%cue.notes.length],t,step*(cue.durations?cue.durations[i%cue.notes.length]:.9),cue.lead,cue.lead==="fiddle"?.024:.033);
  if(i%4===0){
   chord.forEach((note,j)=>instrument(note,t,step*3.85,"pad",.0055));
   instrument(chord[0]-12,t,step*2.4,"horn",.019);

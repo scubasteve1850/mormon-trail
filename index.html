@@ -26,8 +26,63 @@
  #gameControls #log{max-height:145px}
 }
 #storeArt{display:block;width:100%;height:auto;max-height:34dvh;image-rendering:pixelated;border:4px ridge #d3a864}#gameTabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;margin-bottom:5px}#gameTabs button{font-size:.72rem;min-height:36px;padding:4px 1px;margin:0}#gameTabs button.selected{background:#806236;color:#fff0c6}#trailMap{max-width:100%}#suppliesList{line-height:1.8}#storeItems{max-height:31dvh;overflow-y:auto}#store .panel{margin:0}@media(max-width:700px){#gameControls{overflow:hidden;display:flex;flex-direction:column}#travelPanel,#suppliesPanel,#mapPanel,#journalPanel{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain}#travelPanel .panel{margin:5px 0;padding:7px}#travelPanel #stats{grid-template-columns:repeat(4,minmax(0,1fr))}#travelPanel #story{font-size:.84rem;margin:5px 0}#travelPanel h2{font-size:1rem;margin:4px 0}#travelPanel #actions button{min-height:36px}#gameTabs{flex:0 0 auto}#store:not(.hidden){height:100dvh;display:flex;flex-direction:column;overflow:hidden;margin:0}#storeArt{flex:0 0 24dvh;max-height:24dvh;object-fit:cover}#store h2{font-size:1rem;margin:5px 0}#storeSummary,#storeWeight{font-size:.76rem;margin:4px 0}#storeItems{flex:1;max-height:none;min-height:0;overflow-y:auto}#storeItems>div{padding:3px!important;font-size:.77rem}#storeItems button{min-height:30px;padding:3px 9px}body:has(#store:not(.hidden)){height:100dvh;overflow:hidden}body:has(#store:not(.hidden)) main{height:100dvh}body:has(#store:not(.hidden)) header,body:has(#store:not(.hidden)) .soundbar,body:has(#store:not(.hidden)) footer{display:none}#store>button{min-height:36px;margin:2px 0}}
-</style></head><body><main><header><h1>THE MORMON TRAIL</h1><p>★ ZION OR BUST! ★ &nbsp; A retro pioneer adventure</p></header>
-<div class="soundbar"><button id="globalMusic" type="button">♪ Start Music</button><button id="soundTest" type="button">Test Sound</button><label>Volume <input id="volume" type="range" min="0" max="100" value="85"></label><span id="soundStatus" role="status">Music starts after tapping Play</span></div><section id="setup" class="panel"><h2>Outfit Your Company · Nauvoo, 1846</h2><p>Lead your fictional pioneer company toward the Salt Lake Valley. Manage food, supplies, health, and morale. The historical landmarks are real; your adventures are original.</p><p><label>Captain's name <input id="captain" maxlength="28" value="Captain Jensen"></label></p><p><label>Difficulty <select id="difficulty"><option value="easy">Sunday Stroll</option><option value="normal" selected>Pioneer Spirit</option><option value="hard">Zion or Bust!</option></select></label></p><p><label>Starting outfit <select id="outfit"><option value="balanced">Balanced — food, tools, and medicine</option><option value="provisions">Provision-heavy — more food, fewer repairs</option><option value="tools">Prepared — more tools and medicine, less food</option></select></label></p><p><strong>Surprise pioneer company!</strong> Your profession, family members, starting wealth, and transportation are assigned randomly. Families without enough money for a wagon outfit travel by handcart.</p><p id="randomPreview">Discover your family's circumstances when you begin.</p><button id="start">Visit the General Store</button><button id="loadStart">Load Saved Journey</button></section>
+
+:root{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#f7f0df;background:#10262c}
+body{background:radial-gradient(ellipse at 50% 0%,#2b5d63,#0b2026 75%);color:#f7f0df}
+.panel{background:linear-gradient(160deg,#274b47,#183735);border:1px solid #a2b7a5;border-radius:18px;box-shadow:0 12px 25px #061a1a66}
+button{border:1px solid #f5c777;border-radius:12px;background:linear-gradient(#e9b961,#a87636);color:#221e19;box-shadow:0 3px 0 #664827;font-weight:750}
+button:hover,button:focus{background:#ffda87;color:#1d211d}
+input,select{background:#f9f1d9;color:#172b2c;border:1px solid #bca477;border-radius:9px;min-height:42px}
+header{border:0;background:transparent;box-shadow:none;padding:6px}
+header h1{font-family:Georgia,serif;font-size:clamp(1.5rem,4vw,2.4rem);color:#ffe0a0;text-shadow:0 3px 6px #0008}
+header p{color:#f7d28a}
+#setup{padding:0;overflow:hidden}
+.hero-art{height:clamp(145px,27dvh,260px);position:relative;overflow:hidden;background:linear-gradient(#4aa1d2,#a7d5e4 65%,#9fa85d 65%);isolation:isolate}
+.hero-sky{position:absolute;inset:0;overflow:hidden}
+.hero-sun{position:absolute;right:12%;top:11%;width:53px;height:53px;border-radius:50%;background:#ffe3a3;box-shadow:0 0 35px 15px #ffe3a366}
+.hero-mountain{position:absolute;bottom:25%;width:120%;left:-10%;height:65%;clip-path:polygon(0 100%,15% 35%,27% 80%,43% 12%,59% 85%,76% 28%,100% 100%)}
+.mountain-back{background:#6e98a4;opacity:.8;transform:translateY(6px)}
+.mountain-front{background:#466e6a;transform:translateY(35px)}
+.hero-wagon,.hero-cart{position:absolute;bottom:9%;font-size:clamp(24px,6vw,44px);filter:drop-shadow(2px 4px 2px #1d2828);white-space:nowrap}
+.hero-wagon{left:21%}.hero-cart{right:13%;font-size:clamp(20px,5vw,34px)}
+.hero-wordmark{position:absolute;top:7%;left:4%;right:4%;text-align:center;font-family:Georgia,serif;font-size:clamp(17px,5vw,38px);font-weight:900;color:#ffe2a4;text-shadow:2px 3px #40251d,0 0 9px #161e22;letter-spacing:.025em}
+.hero-wordmark strong{display:block;font-size:.72em;color:#fff2c8}
+.setup-content{padding:12px 18px}
+.setup-content h2{font-size:1.05rem;margin:4px 0 7px}
+.setup-content p{margin:7px 0;line-height:1.3;font-size:.87rem}
+.setup-content label{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.setup-content label input,.setup-content label select{width:55%;font-size:.85rem;padding:5px}
+#setup button{width:calc(50% - 9px);min-height:43px;font-size:.85rem;margin:3px}
+#gameTabs button{background:#2e5a56;color:#f6e9c5;border:1px solid #b6ad86;box-shadow:none}
+#gameTabs button.selected{background:#e4ae5b;color:#1b2b2b}
+#game .panel,#store{border-radius:12px}
+#storeArt{border-radius:12px}
+#stats .stat{background:#244e4b;border-radius:8px}
+#scene{image-rendering:auto}
+@media(max-width:700px){
+ body:has(#setup:not(.hidden)){height:100dvh;overflow:hidden;padding:0}
+ body:has(#setup:not(.hidden)) main{height:100dvh;display:flex;flex-direction:column;overflow:hidden;padding:4px 7px max(7px,env(safe-area-inset-bottom))}
+ body:has(#setup:not(.hidden)) header{display:none}
+ body:has(#setup:not(.hidden)) .soundbar{order:2;flex:0 0 auto;padding:4px;margin:4px 0;gap:5px}
+ body:has(#setup:not(.hidden)) .soundbar button{min-height:30px;padding:4px;font-size:.7rem}
+ body:has(#setup:not(.hidden)) .soundbar label{font-size:.7rem}
+ body:has(#setup:not(.hidden)) .soundbar #soundStatus{display:none}
+ body:has(#setup:not(.hidden)) #setup{order:1;flex:1;min-height:0;margin:0;display:flex;flex-direction:column}
+ .hero-art{flex:0 0 25%;height:25%;min-height:100px}
+ .setup-content{flex:1;min-height:0;overflow-y:auto;padding:8px 12px}
+ .setup-content h2{font-size:.96rem}
+ .setup-content p{font-size:.77rem;margin:5px 0}
+ .setup-content label select,.setup-content label input{min-height:34px}
+ #randomPreview{display:none}
+ #setup button{min-height:38px}
+ #game #scene{height:25dvh;min-height:0;flex:0 0 25dvh;max-height:25dvh}
+ #gameControls{flex:1;min-height:0}
+ #gameControls #travelPanel .panel{margin:4px 0}
+ #gameControls #travelPanel #actions button{min-height:34px}
+ #gameControls #stats .stat{font-size:.62rem;padding:3px 1px}
+}
+</style></head><body><main><header><h1>THE MORMON TRAIL</h1><p>✦ ZION OR BUST! ✦</p></header>
+<div class="soundbar"><button id="globalMusic" type="button">♪ Start Music</button><button id="soundTest" type="button">Test Sound</button><label>Volume <input id="volume" type="range" min="0" max="100" value="85"></label><span id="soundStatus" role="status">Music starts after tapping Play</span></div><section id="setup" class="panel"><div class="hero-art" role="img" aria-label="Illustrated covered wagon and pioneer handcart crossing a mountain valley"><div class="hero-sky"><span class="hero-sun"></span><span class="hero-mountain mountain-back"></span><span class="hero-mountain mountain-front"></span><span class="hero-wagon">🐂 🛖</span><span class="hero-cart">🚶 🛒</span></div><div class="hero-wordmark">THE MORMON TRAIL<strong>ZION OR BUST!</strong></div></div><div class="setup-content"><h2>Outfit Your Company · Nauvoo, 1846</h2><p>Lead your fictional pioneer company toward the Salt Lake Valley. Manage food, supplies, health, and morale. The historical landmarks are real; your adventures are original.</p><p><label>Captain's name <input id="captain" maxlength="28" value="Captain Jensen"></label></p><p><label>Difficulty <select id="difficulty"><option value="easy">Sunday Stroll</option><option value="normal" selected>Pioneer Spirit</option><option value="hard">Zion or Bust!</option></select></label></p><p><label>Starting outfit <select id="outfit"><option value="balanced">Balanced — food, tools, and medicine</option><option value="provisions">Provision-heavy — more food, fewer repairs</option><option value="tools">Prepared — more tools and medicine, less food</option></select></label></p><p><strong>Surprise pioneer company!</strong> Your profession, family members, starting wealth, and transportation are assigned randomly. Families without enough money for a wagon outfit travel by handcart.</p><p id="randomPreview">Discover your family's circumstances when you begin.</p><button id="start">Visit the General Store</button><button id="loadStart">Load Saved Journey</button></div></section>
 <section id="store" class="panel hidden"><canvas id="storeArt" width="640" height="260" aria-label="Pixel-art frontier general store with shopkeeper, shelves, and supplies"></canvas><h2>NAUVOO GENERAL STORE</h2><p id="storeSummary"></p><div id="storeItems"></div><p id="storeWeight"></p><button id="depart">Depart for the West →</button><button id="backSetup">← Change Company</button></section><section id="game" class="hidden"><div class="panel" style="display:flex;align-items:center;justify-content:space-between;gap:8px"><span>♪ TRAIL SOUNDTRACK <small id="trackName">Original Frontier Theme</small></span><button id="musicToggle" aria-pressed="false">Music: Off</button></div><canvas id="scene" width="640" height="250" aria-label="Pixel art of a pioneer wagon crossing the plains"></canvas>
 <div id="gameControls"><nav id="gameTabs" aria-label="Game panels"><button type="button" data-tab="travel" class="selected">TRAVEL</button><button type="button" data-tab="supplies">SUPPLIES</button><button type="button" data-tab="map">MAP</button><button type="button" data-tab="journal">JOURNAL</button></nav><div id="travelPanel"><div class="panel"><div class="grid" id="stats"></div><p id="map"></p></div><section class="panel"><h2 id="eventTitle">On the Trail</h2><p id="story"></p><div id="actions"></div></section></div><section id="suppliesPanel" class="panel hidden"><h2>COMPANY SUPPLIES</h2><div id="suppliesList"></div></section><section id="mapPanel" class="panel hidden"><h2>TRAIL MAP</h2><canvas id="trailMap" width="640" height="185" aria-label="Map of trail progress"></canvas><p id="mapLegend"></p></section><section id="journalPanel" class="panel hidden"><h3>Trail Journal</h3><div id="log" aria-live="polite"></div><button id="save">Save Journey</button><button id="restart">New Journey</button></section></div></section><footer><small>Original fan-made historical fiction; not affiliated with The Church of Jesus Christ of Latter-day Saints. Your saved game stays in this browser.</small></footer></main>
 <script>

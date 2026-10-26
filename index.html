@@ -254,6 +254,20 @@ body:has(#storyIntro:not(.hidden)) header,body:has(#storyIntro:not(.hidden)) .so
 .story-intro-progress{color:#eec574;text-align:center;letter-spacing:.35em;margin:12px 0}
 #storyNext{width:100%;min-height:52px;background:linear-gradient(#e8b962,#a86a2d);border:2px solid #ffe5a3;color:#fff6df;border-radius:12px;font-weight:900;font-size:clamp(13px,3.7vw,17px);text-shadow:0 2px #6b431f}
 @media(max-height:650px){.story-intro-panel{padding:12px;margin-bottom:8px}.story-intro-panel p{font-size:14px;min-height:0;line-height:1.4}.story-intro-panel h2{font-size:22px}.story-intro-progress{margin:5px}}
+
+/* Cinematic, interactive general store */
+#storePhoto{display:block;width:100%;height:clamp(145px,25dvh,260px);object-fit:cover;object-position:center 47%;border-radius:12px;border:2px solid #bd9256}
+#storePhoto[hidden],#storeArt[hidden]{display:none!important}
+#storeCategories{display:flex;gap:5px;overflow-x:auto;flex:0 0 auto;padding:4px 0 8px}
+#storeCategories button{width:auto!important;min-width:max-content!important;padding:8px 13px!important;min-height:36px!important;font-size:.83rem!important;border-radius:10px;background:#123638;color:#f8e3b2;border:1px solid #b58a49}
+#storeCategories button.selected{background:linear-gradient(#f0c877,#b97a35);color:#302113}
+#storeItems{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;overflow-y:auto;min-height:0;max-height:none!important}
+.shop-item{min-height:88px}
+.shop-actions{display:flex;flex-direction:column;gap:4px;flex:0 0 auto}
+.shop-actions button{min-height:29px!important;padding:4px 8px!important;font-size:.73rem!important}
+.shop-actions .shop-sell{background:#e7d4b5;color:#4d3828;border:1px solid #a98b63}
+#store>button{min-height:46px!important;flex:0 0 auto!important;padding:9px!important;font-size:.88rem!important}
+@media(max-width:600px){#storeItems{grid-template-columns:1fr;gap:5px}.shop-item{min-height:60px}.shop-actions{flex-direction:row}#storePhoto{flex:0 0 auto;height:clamp(130px,23dvh,220px)}#storeArt{flex:0 0 auto!important;max-height:23dvh!important}#store>button{min-height:44px!important;height:auto!important;max-height:48px!important}}
 </style></head><body><main><header><h1>THE MORMON TRAIL</h1><p>✦ ZION OR BUST! ✦</p></header>
 <div class="soundbar"><button id="globalMusic" type="button">♪ Start Music</button><button id="soundTest" type="button">Test Sound</button><label>Volume <input id="volume" type="range" min="0" max="100" value="85"></label><span id="soundStatus" role="status">Music starts after tapping Play</span></div><section id="welcome" class="welcome-screen" aria-label="The Mormon Trail home screen">
  <div class="title-art-stage">
@@ -296,7 +310,7 @@ body:has(#storyIntro:not(.hidden)) header,body:has(#storyIntro:not(.hidden)) .so
   </div>
  </div>
 </section>
-<section id="store" class="panel hidden"><canvas id="storeArt" width="640" height="260" aria-label="Pixel-art frontier general store with shopkeeper, shelves, and supplies"></canvas><h2>NAUVOO GENERAL STORE</h2><p id="storeSummary"></p><div id="storeItems"></div><p id="storeWeight"></p><button id="depart">Depart for the West →</button><button id="backSetup">← Change Company</button></section><section id="game" class="hidden"><div class="panel" style="display:flex;align-items:center;justify-content:space-between;gap:8px"><span>♪ TRAIL SOUNDTRACK <small id="trackName">Original Frontier Theme</small></span><button id="musicToggle" aria-pressed="false">Music: Off</button></div><canvas id="scene" width="640" height="250" aria-label="Pixel art of a pioneer wagon crossing the plains"></canvas>
+<section id="store" class="panel hidden"><img id="storePhoto" src="assets/nauvoo-general-store.webp" alt="Warm lantern-lit Nauvoo general store with a shopkeeper and pioneer family" onerror="this.hidden=true;document.getElementById('storeArt').hidden=false"><canvas id="storeArt" width="640" height="260" hidden aria-label="Frontier general store"></canvas><h2>NAUVOO GENERAL STORE</h2><p id="storeSummary"></p><nav id="storeCategories" aria-label="Shop categories"><button type="button" class="selected" data-shop="all">All goods</button><button type="button" data-shop="food">Food</button><button type="button" data-shop="clothing">Clothing</button><button type="button" data-shop="equipment">Equipment</button></nav><div id="storeItems"></div><p id="storeWeight"></p><button id="depart">Depart for the West →</button><button id="backSetup">← Change Company</button></section><section id="game" class="hidden"><div class="panel" style="display:flex;align-items:center;justify-content:space-between;gap:8px"><span>♪ TRAIL SOUNDTRACK <small id="trackName">Original Frontier Theme</small></span><button id="musicToggle" aria-pressed="false">Music: Off</button></div><canvas id="scene" width="640" height="250" aria-label="Pixel art of a pioneer wagon crossing the plains"></canvas>
 <div id="gameControls"><nav id="gameTabs" aria-label="Game panels"><button type="button" data-tab="travel" class="selected">🧭 Trail</button><button type="button" data-tab="supplies">🎒 Gear</button><button type="button" data-tab="map">🗺️ Map</button><button type="button" data-tab="journal">📖 Story</button></nav><div id="travelPanel"><div class="panel"><div class="grid" id="stats"></div><p id="map"></p><div class="journey-progress" role="progressbar" aria-label="Journey completed" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="journeyFill"></div></div></div><section class="panel"><h2 id="eventTitle">On the Trail</h2><p id="story"></p><div id="actions"></div></section></div><section id="suppliesPanel" class="panel hidden"><h2>Meet Your Company</h2><div id="familyCards"></div><h3>🎒 Supplies</h3><div id="suppliesList"></div></section><section id="mapPanel" class="panel hidden"><h2>TRAIL MAP</h2><canvas id="trailMap" width="640" height="185" aria-label="Map of trail progress"></canvas><p id="mapLegend"></p></section><section id="journalPanel" class="panel hidden"><h3>Trail Journal</h3><div id="log" aria-live="polite"></div><button id="save">Save Journey</button><button id="restart">New Journey</button></section></div></section><footer><small>Original fan-made historical fiction; not affiliated with The Church of Jesus Christ of Latter-day Saints. Your saved game stays in this browser.</small></footer></main>
 <script>
 "use strict";
@@ -390,26 +404,28 @@ function drawStore(){
  x.fillStyle="#e3c379";x.fillRect(274,186,354,65);x.fillStyle="#4d3021";x.font="bold 20px monospace";x.fillText("WELCOME, TRAVELERS!",292,219);x.font="13px monospace";x.fillText("Fine goods • Fair prices*",295,240);
 }
 const itemIcons={food:"🥖",parts:"🛠️",medicine:"🩺",ammo:"🎯",clothing:"🧥",oxen:"🐂"};
+let activeShopCategory="all";
 function shopView(){
  drawStore();normalizeCompany();
  const summary=$("storeSummary"),items=$("storeItems");
  summary.textContent=state.captain+" · "+state.profession+" · "+state.wealth+" means · "+(state.transport==="handcart"?"Handcart":"Covered wagon")+" · "+state.company.map(p=>p.name).join(", ");
+ document.querySelectorAll("#storeCategories button").forEach(btn=>{btn.classList.toggle("selected",btn.dataset.shop===activeShopCategory);btn.onclick=()=>{activeShopCategory=btn.dataset.shop;shopView()}});
  items.replaceChildren();
- goods.forEach(g=>{
+ goods.filter(g=>activeShopCategory==="all"||(activeShopCategory==="food"?g[0]==="food":activeShopCategory==="clothing"?g[0]==="clothing":!["food","clothing"].includes(g[0]))).forEach(g=>{
   const row=document.createElement("div");row.className="shop-item";
   const icon=document.createElement("span");icon.className="shop-icon";icon.textContent=itemIcons[g[0]]||"📦";
   const details=document.createElement("div");details.className="shop-description";
   const name=document.createElement("strong");name.textContent=g[1];
   const price=document.createElement("small");price.textContent="$"+storePrice(g)+" · "+g[3]+" lbs cargo";
   details.append(name,price);
-  const buy=document.createElement("button");buy.textContent="Add +";buy.setAttribute("aria-label","Buy "+g[1]);
+  const actions=document.createElement("div");actions.className="shop-actions";
+  const buy=document.createElement("button");buy.textContent="Buy +";buy.setAttribute("aria-label","Buy "+g[1]);
   buy.disabled=state.cash<storePrice(g)||weight()+g[3]>capacity()||(g[0]==="oxen"&&state.transport==="handcart");
-  buy.onclick=()=>{
-   if(buy.disabled)return;
-   state.cash-=storePrice(g);state[g[0]]+=g[0]==="food"?25:g[0]==="ammo"?20:1;
-   shopView();
-  };
-  row.append(icon,details,buy);items.append(row);
+  buy.onclick=()=>{if(buy.disabled)return;state.cash-=storePrice(g);state[g[0]]+=g[0]==="food"?25:g[0]==="ammo"?20:1;shopView()};
+  const sell=document.createElement("button");sell.textContent="Sell −";sell.className="shop-sell";sell.setAttribute("aria-label","Sell "+g[1]);
+  sell.disabled=state[g[0]]<(g[0]==="food"?25:g[0]==="ammo"?20:1);
+  sell.onclick=()=>{if(sell.disabled)return;state[g[0]]-=g[0]==="food"?25:g[0]==="ammo"?20:1;state.cash+=Math.floor(storePrice(g)*.6);shopView()};
+  actions.append(buy,sell);row.append(icon,details,actions);items.append(row);
  });
  $("storeWeight").textContent="💰 $"+state.cash+" remaining  ·  📦 "+Math.round(weight())+" / "+capacity()+" lbs  ·  🍞 "+state.food+" lbs food";
 }

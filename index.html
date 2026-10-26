@@ -229,6 +229,14 @@ body:has(#setup:not(.hidden)) #setup.setup-adventure{display:block!important;pos
 .setup-adventure #loadStart.setup-load{width:100%!important;margin:0!important;min-height:30px!important;padding:3px!important;border:0!important;background:transparent!important;color:#e8d7b4!important;box-shadow:none!important;font-size:12px!important;text-decoration:underline}
 @media(max-height:720px){.setup-shell{padding-top:8px;padding-bottom:8px}.setup-intro{padding-bottom:7px}.setup-card{gap:5px;padding:9px}.setup-card-heading{padding-bottom:4px}.setup-surprise{padding:5px}.setup-intro h2{font-size:27px}.setup-field input,.setup-field select{min-height:35px!important}}
 @media(max-width:350px){.setup-shell{padding-left:10px;padding-right:10px}.setup-card-heading small{display:none}}
+
+/* Dedicated Nauvoo departure background; fallback to approved title artwork until image uploaded. */
+.setup-scene{background-image:linear-gradient(180deg,#10262b22 0%,#0b202a44 37%,#071b22b8 67%,#07191ef5 100%),url("assets/nauvoo-departure.webp"),url("assets/title-screen.webp")!important;background-position:center,center 30%,center 40%!important;background-size:cover!important}
+.setup-topbar{position:relative;z-index:2;gap:10px}
+.setup-adventure .setup-back{flex:0 0 auto!important;min-width:94px!important;max-width:120px!important;font-size:17px!important}
+.setup-chapter{text-align:right;flex:1;font-size:clamp(9px,2.5vw,12px);line-height:1.2}
+.setup-intro{padding-bottom:16px}
+@media(max-height:720px){.setup-intro{padding-bottom:8px}.setup-card{gap:8px}}
 </style></head><body><main><header><h1>THE MORMON TRAIL</h1><p>✦ ZION OR BUST! ✦</p></header>
 <div class="soundbar"><button id="globalMusic" type="button">♪ Start Music</button><button id="soundTest" type="button">Test Sound</button><label>Volume <input id="volume" type="range" min="0" max="100" value="85"></label><span id="soundStatus" role="status">Music starts after tapping Play</span></div><section id="welcome" class="welcome-screen" aria-label="The Mormon Trail home screen">
  <div class="title-art-stage">
@@ -251,8 +259,8 @@ body:has(#setup:not(.hidden)) #setup.setup-adventure{display:block!important;pos
    <div class="setup-card-heading"><span class="setup-seal">✦</span><div><strong>PREPARE YOUR COMPANY</strong><small>Every adventure begins with a choice.</small></div></div>
    <label class="setup-field"><span>CAPTAIN'S NAME</span><input id="captain" maxlength="28" value="Captain Jensen" autocomplete="off"></label>
    <label class="setup-field"><span>TRAIL DIFFICULTY</span><select id="difficulty"><option value="easy">Sunday Stroll · Easy</option><option value="normal" selected>Pioneer Spirit · Normal</option><option value="hard">Zion or Bust! · Hard</option></select></label>
-   <label class="setup-field"><span>STARTING SUPPLIES</span><select id="outfit"><option value="balanced">Balanced · Food, tools & medicine</option><option value="provisions">Extra provisions · Less equipment</option><option value="tools">Extra tools · Less food</option></select></label>
-   <div class="setup-surprise"><span class="setup-dice">🎲</span><p><strong>A surprise awaits!</strong> Your family, profession and fortune are randomly assigned. Those who cannot afford a wagon travel by handcart.</p></div>
+   
+   <div class="setup-surprise"><span class="setup-dice">🎲</span><p><strong>A surprise awaits!</strong> Your family, profession, supplies and fortune are randomly assigned. Those who cannot afford a wagon travel by handcart.</p></div>
    <button id="start" class="setup-go">BEGIN YOUR ADVENTURE <span aria-hidden="true">➜</span></button>
    <button id="loadStart" class="setup-load">Continue a saved journey</button>
   </div>
@@ -376,7 +384,7 @@ function shopView(){
  $("storeWeight").textContent="💰 $"+state.cash+" remaining  ·  📦 "+Math.round(weight())+" / "+capacity()+" lbs  ·  🍞 "+state.food+" lbs food";
 }
 function start(){
- const difficulty=$("difficulty").value,outfit=$("outfit").value;
+ const difficulty=$("difficulty").value,outfits=["balanced","provisions","tools"],outfit=outfits[Math.floor(Math.random()*outfits.length)];
  const professions=["farmer","carpenter","doctor","merchant","teacher"];
  const profession=professions[Math.floor(Math.random()*professions.length)];
  const wealthRoll=Math.random(),wealth=wealthRoll<.36?"limited":wealthRoll<.78?"modest":"comfortable";
@@ -388,7 +396,7 @@ function start(){
  state={captain:$("captain").value.trim()||"Captain Jensen",difficulty,profession,wealth,transport,cash,day:1,miles:0,food:outfit==="provisions"?350:outfit==="tools"?180:260,parts:outfit==="tools"?5:outfit==="provisions"?1:3,medicine:outfit==="tools"?5:outfit==="provisions"?1:3,health:100,morale:profession==="teacher"?98:85,weather:"Clear",pace:"steady",rations:"normal",crossedRivers:[],ammo:20,clothing:3,oxen:transport==="handcart"?0:2,company:family,journal:[]};
  if(profession==="carpenter")state.parts+=2;if(profession==="doctor")state.medicine+=2;
  if(difficulty==="easy")state.food+=80;if(difficulty==="hard")state.food-=50;
- log(state.captain+" joins the trail as a "+profession+" with "+wealth+" means. "+(transport==="handcart"?"A wagon outfit is beyond the family's budget, so they travel by handcart.":"The family can afford a covered wagon."));
+ log(state.captain+" joins the trail as a "+profession+" with "+wealth+" means and a "+outfit+" supply bundle. "+(transport==="handcart"?"A wagon outfit is beyond the family's budget, so they travel by handcart.":"The family can afford a covered wagon."));
  $("setup").classList.add("hidden");$("welcome").classList.add("hidden");$("store").classList.remove("hidden");shopView();
 }
 function depart(){if(state.food<50){alert("You need at least 50 lbs of food to depart.");return}if(state.transport==="wagon"&&state.oxen<2){alert("A wagon needs at least two oxen.");return}$("store").classList.add("hidden");log("Purchased provisions and departed Nauvoo.");controls()}

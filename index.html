@@ -38,16 +38,16 @@ function event(){pending=true;let e=encounters[Math.floor(Math.random()*encounte
 function hunt(){
  pending=true;state.day++;state.food-=9;
  show("Hunting on the Prairie","Tap the moving targets before the sun sets! You have five shots. Every hit brings home food.",[]);
- const area=document.createElement("div");area.style.cssText="height:185px;position:relative;background:linear-gradient(#86b9c4 55%,#8a9b65 55%);border:3px solid #ad8b50;overflow:hidden;touch-action:manipulation";
+ const area=document.createElement("div");area.style.cssText="height:185px;width:100%;flex:0 0 100%;position:relative;background:linear-gradient(#86b9c4 55%,#8a9b65 55%);border:3px solid #ad8b50;overflow:hidden;touch-action:manipulation";
  $("actions").append(area);let shots=5,hits=0,ended=false;
- const label=document.createElement("p");label.textContent="Shots: 5 | Hits: 0";$("actions").append(label);
+ const label=document.createElement("p");label.style.cssText="width:100%;flex:0 0 100%;margin:6px 0";label.textContent="Shots: 5 | Hits: 0";$("actions").append(label);
  const target=document.createElement("button");target.textContent="🦬";target.setAttribute("aria-label","Hunt bison");target.style.cssText="position:absolute;font-size:38px;background:transparent;border:0;min-width:65px;min-height:55px";area.append(target);
  let step=0;const move=()=>{step++;target.style.left=(8+Math.abs(Math.sin(step*1.4))*72)+"%";target.style.top=(57+Math.sin(step*.9)*18)+"%"};move();
  const timer=setInterval(move,500);
  const finish=()=>{if(ended)return;ended=true;clearInterval(timer);state.food+=hits*28;state.morale+=hits?4:-5;state.health-=2;log("Hunting party returned with "+(hits*28)+" lbs of food after "+hits+" successful shots.");controls()};
  target.onclick=()=>{if(ended)return;hits++;shots--;label.textContent="Shots: "+shots+" | Hits: "+hits;move();if(shots<=0)finish()};
  area.onclick=e=>{if(ended||e.target===target)return;shots--;label.textContent="Shots: "+shots+" | Hits: "+hits;if(shots<=0)finish()};
- const leave=document.createElement("button");leave.textContent="Return to Wagon";leave.onclick=finish;$("actions").append(leave);
+ const leave=document.createElement("button");leave.style.flex="0 0 auto";leave.textContent="Return to Wagon";leave.onclick=finish;$("actions").append(leave);
  setTimeout(finish,18000);
 }
 function river(){

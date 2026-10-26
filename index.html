@@ -499,8 +499,8 @@ const storyPages=[
 ];
 let storyPage=0;
 function showStory(){storyPage=0;$("store").classList.add("hidden");$("storyIntro").classList.remove("hidden");renderStory()}
-function renderStory(){setMusicCue("story");const page=storyPages[storyPage];const scenes=["farewell-nauvoo","driven-from-home","temple-left-behind","journey-begins"];$("storyIntro").style.setProperty("--story-art",`url("assets/${scenes[storyPage]}.webp")`);$("storyIntro").querySelector(".story-intro-top>span").textContent="CHAPTER "+String(storyPage+1).padStart(2,"0");$("storyHeading").textContent=page.title;$("storyText").textContent=page.text;$("storyCount").textContent=(storyPage+1)+" OF "+storyPages.length;$("storyProgress").textContent=storyPages.map((_,i)=>i===storyPage?"◆":"◇").join("  ");$("storyNext").textContent=storyPage===storyPages.length-1?"VISIT THE GENERAL STORE ➜":"CONTINUE THE STORY ➜"}
-function finishStory(){setMusicCue("store");$("storyIntro").classList.add("hidden");$("store").classList.remove("hidden");shopView()}
+function renderStory(){setMusicCue("title");const page=storyPages[storyPage];const scenes=["farewell-nauvoo","driven-from-home","temple-left-behind","journey-begins"];$("storyIntro").style.setProperty("--story-art",`url("assets/${scenes[storyPage]}.webp")`);$("storyIntro").querySelector(".story-intro-top>span").textContent="CHAPTER "+String(storyPage+1).padStart(2,"0");$("storyHeading").textContent=page.title;$("storyText").textContent=page.text;$("storyCount").textContent=(storyPage+1)+" OF "+storyPages.length;$("storyProgress").textContent=storyPages.map((_,i)=>i===storyPage?"◆":"◇").join("  ");$("storyNext").textContent=storyPage===storyPages.length-1?"VISIT THE GENERAL STORE ➜":"CONTINUE THE STORY ➜"}
+function finishStory(){setMusicCue("title");$("storyIntro").classList.add("hidden");$("store").classList.remove("hidden");shopView()}
 function departureWarnings(){
  const people=state.company.length||5,alerts=[];
  if(state.food<150)alerts.push("Food is running low for "+people+" travelers. More provisions could help your family on the trail.");
@@ -526,7 +526,7 @@ function save(){if(!state)return;try{localStorage.setItem(SAVE,JSON.stringify(st
 function load(){try{let s=JSON.parse(localStorage.getItem(SAVE));if(!s||!Array.isArray(s.journal)||typeof s.miles!=="number")throw Error();state=s;normalizeCompany();log("Resumed saved journey.");controls()}catch(e){alert("No valid saved journey was found.")}}
 let audioCtx=null,musicOn=false,musicTimer=null,noteIndex=0,currentCue="title",masterGain=null;
 const soundtracks={
- title:{name:"Westward Overture · Cinematic",tempo:285,notes:[64,67,69,72,74,72,69,67,64,67,72,76,74,72,69,null],chords:[[48,52,55],[53,57,60],[55,59,62],[48,52,55]],lead:"horn"},
+ title:{name:"Come, Come, Ye Saints · Western Fiddle Overture",tempo:245,notes:[67,67,69,71,72,71,69,67,64,67,69,67,64,62,67,null,67,69,71,74,72,71,69,67,69,71,72,69,67,62,67,null],chords:[[55,59,62],[50,54,57],[48,52,55],[55,59,62]],lead:"fiddle"},
  story:{name:"Farewell to Nauvoo · Hymn-Inspired",tempo:420,notes:[67,69,72,71,69,67,64,null,65,67,69,72,71,69,67,null],chords:[[48,52,55],[45,48,52],[53,57,60],[55,59,62]],lead:"flute"},
  store:{name:"The Nauvoo Mercantile · Folk Dance",tempo:240,notes:[67,72,76,72,69,72,76,72,67,71,74,71,65,69,72,null],chords:[[48,52,55],[53,57,60],[55,59,62],[48,52,55]],lead:"pluck"},
  travel:{name:"Frontier Journey · Orchestral",tempo:245,notes:[64,67,69,72,71,69,67,64,62,64,67,69,67,64,62,60],chords:[[48,52,55],[53,57,60],[55,59,62],[48,52,55]],lead:"horn"},
@@ -539,15 +539,16 @@ const soundtracks={
 function instrument(midi,start,duration,voice="horn",volume=.03){
  if(!audioCtx||midi==null)return;
  const frequency=440*Math.pow(2,(midi-69)/12),end=start+Math.max(.08,duration),gain=audioCtx.createGain();
- const attack=voice==="pad"?.18:voice==="horn"?.065:voice==="flute"?.05:.009;
+ const attack=voice==="pad"?.18:voice==="horn"?.065:voice==="flute"?.05:voice==="fiddle"?.028:.009;
  gain.gain.setValueAtTime(.0001,start);
  gain.gain.linearRampToValueAtTime(volume,start+Math.min(attack,duration*.45));
  gain.gain.setTargetAtTime(.0001,Math.max(start+attack,end-Math.min(.2,duration*.3)),Math.max(.03,duration*.12));
  const osc=audioCtx.createOscillator();
- osc.type=voice==="flute"?"sine":voice==="pluck"?"triangle":voice==="pad"?"sawtooth":voice==="strings"?"sawtooth":"triangle";
+ osc.type=voice==="flute"?"sine":voice==="pluck"?"triangle":voice==="pad"?"sawtooth":voice==="strings"||voice==="fiddle"?"sawtooth":"triangle";
  osc.frequency.setValueAtTime(frequency,start);
+ if(voice==="fiddle"){osc.frequency.setValueAtTime(frequency*.998,start);osc.frequency.linearRampToValueAtTime(frequency*1.002,start+Math.min(duration*.5,.16));osc.frequency.linearRampToValueAtTime(frequency,start+Math.min(duration,.3))}
  if(voice==="horn"||voice==="strings")osc.frequency.setValueAtTime(frequency*.997,start);
- const filter=audioCtx.createBiquadFilter();filter.type="lowpass";filter.frequency.value=voice==="pad"?850:voice==="strings"?1800:voice==="horn"?1300:voice==="pluck"?2800:2300;
+ const filter=audioCtx.createBiquadFilter();filter.type="lowpass";filter.frequency.value=voice==="pad"?850:voice==="strings"?1800:voice==="fiddle"?2500:voice==="horn"?1300:voice==="pluck"?2800:2300;
  osc.connect(filter).connect(gain).connect(masterGain||audioCtx.destination);
  osc.start(start);osc.stop(end+.18);
 }
@@ -564,20 +565,20 @@ function musicTick(){
  if(!musicOn||!audioCtx)return;
  const cue=soundtracks[currentCue],i=noteIndex++,step=cue.tempo/1000,t=audioCtx.currentTime+.025;
  const chord=cue.chords[Math.floor(i/4)%cue.chords.length];
- instrument(cue.notes[i%cue.notes.length],t,step*.9,cue.lead,.033);
+ instrument(cue.notes[i%cue.notes.length],t,step*.9,cue.lead,cue.lead==="fiddle"?.024:.033);
  if(i%4===0){
   chord.forEach((note,j)=>instrument(note,t,step*3.85,"pad",.0055));
   instrument(chord[0]-12,t,step*2.4,"horn",.019);
  }
- if(i%2===0)instrument(chord[1]+12,t,step*.45,"pluck",.008);
- if(["travel","handcart","hunt","arrival","store"].includes(currentCue)){
+ if(currentCue==="title"){instrument(chord[i%3]+12,t,step*.38,"pluck",.014);if(i%4===2)instrument(chord[0]-12,t,step*.8,"pluck",.014)}else if(i%2===0)instrument(chord[1]+12,t,step*.45,"pluck",.008);
+ if(["title","travel","handcart","hunt","arrival","store"].includes(currentCue)){
   if(i%4===0)percussion(t,"drum",currentCue==="hunt"?.018:.01);
   if(i%4===2)percussion(t,"tap",.006);
  }
 }
 function setMusicCue(cue){
  if(!soundtracks[cue])cue="travel";
- if(currentCue===cue&&musicTimer)return;
+ if(currentCue===cue)return;
  currentCue=cue;noteIndex=0;
  const label=$("trackName");if(label)label.textContent=soundtracks[cue].name;
  if(musicTimer){clearInterval(musicTimer);musicTimer=null}

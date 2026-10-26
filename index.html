@@ -231,7 +231,7 @@ body:has(#setup:not(.hidden)) #setup.setup-adventure{display:block!important;pos
 @media(max-width:350px){.setup-shell{padding-left:10px;padding-right:10px}.setup-card-heading small{display:none}}
 
 /* Dedicated Nauvoo departure background; fallback to approved title artwork until image uploaded. */
-.setup-scene{background-image:linear-gradient(180deg,#10262b22 0%,#0b202a44 37%,#071b22b8 67%,#07191ef5 100%),url("assets/nauvoo-departure.webp")!important;background-position:center,center center!important;background-size:cover!important}
+.setup-scene{background-image:linear-gradient(180deg,#10262b33 0%,#0b202a55 37%,#071b22b8 67%,#07191ef5 100%),url("assets/title-screen.webp")!important;background-position:center,center 58%!important;background-size:cover!important}
 .setup-topbar{position:relative;z-index:2;gap:10px}
 .setup-adventure .setup-back{flex:0 0 auto!important;min-width:94px!important;max-width:120px!important;font-size:17px!important}
 .setup-chapter{text-align:right;flex:1;font-size:clamp(9px,2.5vw,12px);line-height:1.2}
@@ -243,7 +243,7 @@ body:has(#storyIntro:not(.hidden)){padding:0!important;margin:0!important;backgr
 body:has(#storyIntro:not(.hidden)) main{padding:0!important;margin:0!important;max-width:none!important;width:100%!important;height:100dvh}
 body:has(#storyIntro:not(.hidden)) header,body:has(#storyIntro:not(.hidden)) .soundbar,body:has(#storyIntro:not(.hidden)) footer{display:none!important}
 #storyIntro.story-intro:not(.hidden){position:relative;display:flex;flex-direction:column;height:100dvh;overflow:hidden;isolation:isolate;background:#132b31}
-.story-intro-bg{position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,#0b1d2440 5%,#0b1d2444 35%,#08191edb 77%,#08191ef5 100%),url("assets/nauvoo-departure.webp") center/cover no-repeat}
+.story-intro-bg{position:absolute;inset:0;z-index:-1;background-image:linear-gradient(180deg,#0b1d2440 5%,#0b1d2444 35%,#08191edb 77%,#08191ef5 100%),url("assets/title-screen.webp");background-position:center,center 58%;background-size:cover;background-repeat:no-repeat}
 .story-intro-content{height:100%;display:flex;flex-direction:column;padding:max(18px,env(safe-area-inset-top)) 18px max(22px,env(safe-area-inset-bottom));width:min(100%,540px);margin:0 auto}
 .story-intro-top{display:flex;justify-content:space-between;align-items:center;gap:12px;color:#ffe2a1;font-size:12px;font-weight:900;letter-spacing:.12em}
 #storySkip{width:auto!important;min-height:38px;padding:7px 12px;background:#142e36cc;color:#ffe8b8;border:1px solid #caa367;border-radius:12px;font-size:13px;box-shadow:none}

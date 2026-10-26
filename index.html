@@ -450,7 +450,7 @@ function shopView(){
   const updateQuantity=()=>{count.textContent=String(qty);minus.disabled=qty<=1;shopQuantities[key]=qty;if(typeof buy!=="undefined")buy.textContent="Buy $"+(price*qty)};
   minus.onclick=()=>{qty=Math.max(1,qty-1);updateQuantity()};
   plus.onclick=()=>{qty=Math.min(99,qty+1);updateQuantity()};
-  updateQuantity();quantity.append(minus,count,plus);
+  quantity.append(minus,count,plus);
   const buy=document.createElement("button");buy.textContent="Buy";buy.setAttribute("aria-label","Buy selected quantity of "+g[1]);
   buy.textContent="Buy $"+(price*qty);buy.disabled=(state.cash<price)||(weight()+mass>capacity())||(key==="oxen"&&state.transport==="handcart");
   buy.onclick=()=>{
@@ -458,6 +458,7 @@ function shopView(){
    if(state.cash<total||weight()+extra>capacity()||(key==="oxen"&&state.transport==="handcart")){alert("Not enough money or cargo space for "+qty+" "+g[1]+".");return}
    state.cash-=total;state[key]+=unit*qty;shopView();
   };
+  updateQuantity();
   const sell=document.createElement("button");sell.textContent="Sell";sell.className="shop-sell";sell.setAttribute("aria-label","Sell selected quantity of "+g[1]);
   sell.disabled=(state[key]||0)<unit;
   sell.onclick=()=>{

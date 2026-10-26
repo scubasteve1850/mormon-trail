@@ -105,6 +105,21 @@ body:has(#game:not(.hidden)) main{height:100dvh;overflow:hidden}
 #travelPanel #actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
 #travelPanel #actions button{min-height:38px;padding:5px 4px;font-size:clamp(11px,3vw,14px)}
 }
+
+/* Iteration 3: store experience */
+#store{background:linear-gradient(150deg,#f4d9a5,#dfba78);color:#32281f}
+#store h2{color:#593921;text-shadow:none;font-size:clamp(17px,4.2vw,24px)}
+#storeSummary{color:#5b4933;font-size:.85rem;line-height:1.3}
+#storeWeight{background:#fff2d4;border:1px solid #a27b45;border-radius:12px;color:#493420;padding:8px;font-weight:800}
+#storeItems{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-content:start}
+.shop-item{display:flex;align-items:center;gap:8px;background:#fff4dc;border:1px solid #b18a52;border-radius:12px;padding:8px;box-shadow:0 3px 8px #583e2824;min-width:0}
+.shop-icon{font-size:clamp(22px,4vw,32px);flex:0 0 auto}
+.shop-description{display:flex;flex-direction:column;min-width:0;flex:1}
+.shop-description strong{font-size:.83rem;color:#35281f;line-height:1.2}
+.shop-description small{color:#6d5235;font-size:.69rem}
+.shop-item button{flex:0 0 auto;min-width:0!important;font-size:.78rem;padding:7px}
+#store>button{font-size:.85rem}
+@media(max-width:600px){#storeItems{grid-template-columns:1fr;gap:4px}.shop-item{padding:4px 8px}.shop-icon{font-size:23px}.shop-description strong{font-size:.8rem}.shop-item button{min-height:34px}#storeArt{flex-basis:21dvh;max-height:21dvh}}
 </style></head><body><main><header><h1>THE MORMON TRAIL</h1><p>✦ ZION OR BUST! ✦</p></header>
 <div class="soundbar"><button id="globalMusic" type="button">♪ Start Music</button><button id="soundTest" type="button">Test Sound</button><label>Volume <input id="volume" type="range" min="0" max="100" value="85"></label><span id="soundStatus" role="status">Music starts after tapping Play</span></div><section id="setup" class="panel"><div class="hero-art" role="img" aria-label="Illustrated covered wagon and pioneer handcart crossing a mountain valley"><div class="hero-sky"><span class="hero-sun"></span><span class="hero-mountain mountain-back"></span><span class="hero-mountain mountain-front"></span><span class="hero-wagon">🐂 🛖</span><span class="hero-cart">🚶 🛒</span></div><div class="hero-wordmark">THE MORMON TRAIL<strong>ZION OR BUST!</strong></div></div><div class="setup-content"><h2>Outfit Your Company · Nauvoo, 1846</h2><p>Lead your fictional pioneer company toward the Salt Lake Valley. Manage food, supplies, health, and morale. The historical landmarks are real; your adventures are original.</p><p><label>Captain's name <input id="captain" maxlength="28" value="Captain Jensen"></label></p><p><label>Difficulty <select id="difficulty"><option value="easy">Sunday Stroll</option><option value="normal" selected>Pioneer Spirit</option><option value="hard">Zion or Bust!</option></select></label></p><p><label>Starting outfit <select id="outfit"><option value="balanced">Balanced — food, tools, and medicine</option><option value="provisions">Provision-heavy — more food, fewer repairs</option><option value="tools">Prepared — more tools and medicine, less food</option></select></label></p><p><strong>Surprise pioneer company!</strong> Your profession, family members, starting wealth, and transportation are assigned randomly. Families without enough money for a wagon outfit travel by handcart.</p><p id="randomPreview">Discover your family's circumstances when you begin.</p><button id="start">Visit the General Store</button><button id="loadStart">Load Saved Journey</button></div></section>
 <section id="store" class="panel hidden"><canvas id="storeArt" width="640" height="260" aria-label="Pixel-art frontier general store with shopkeeper, shelves, and supplies"></canvas><h2>NAUVOO GENERAL STORE</h2><p id="storeSummary"></p><div id="storeItems"></div><p id="storeWeight"></p><button id="depart">Depart for the West →</button><button id="backSetup">← Change Company</button></section><section id="game" class="hidden"><div class="panel" style="display:flex;align-items:center;justify-content:space-between;gap:8px"><span>♪ TRAIL SOUNDTRACK <small id="trackName">Original Frontier Theme</small></span><button id="musicToggle" aria-pressed="false">Music: Off</button></div><canvas id="scene" width="640" height="250" aria-label="Pixel art of a pioneer wagon crossing the plains"></canvas>
@@ -192,9 +207,30 @@ function drawStore(){
  x.fillStyle="#c98b4a";x.fillRect(150,201,100,12);x.fillStyle="#80532e";x.fillRect(160,213,10,47);x.fillRect(236,213,10,47);
  x.fillStyle="#e3c379";x.fillRect(274,186,354,65);x.fillStyle="#4d3021";x.font="bold 20px monospace";x.fillText("WELCOME, TRAVELERS!",292,219);x.font="13px monospace";x.fillText("Fine goods • Fair prices*",295,240);
 }
-function shopView(){drawStore();const summary=$("storeSummary"),items=$("storeItems");summary.textContent=state.captain+" | "+state.profession+" | "+state.wealth+" means | "+(state.transport==="handcart"?"Handcart":"Covered wagon")+" | Cash: $"+state.cash+" | Family: "+state.company.map(p=>p.name).join(", ");items.replaceChildren();goods.forEach(g=>{let row=document.createElement("div");row.style.cssText="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:8px;border-bottom:1px solid #655638";let name=document.createElement("span");name.textContent=g[1]+" — $"+storePrice(g);let buy=document.createElement("button");buy.textContent="Buy";buy.onclick=()=>{if(g[0]==="oxen"&&state.transport==="handcart"){alert("Handcarts do not use oxen.");return}if(state.cash<storePrice(g)){alert("Not enough money.");return}if(weight()+g[3]>capacity()){alert("Your "+state.transport+" cannot carry any more.");return}state.cash-=storePrice(g);state[g[0]]+=g[0]==="food"?25:g[0]==="ammo"?20:1;shopView()};row.append(name,buy);items.append(row)});$("storeWeight").textContent="Load: "+weight()+" / "+capacity()+" lbs · Food: "+state.food+" lbs · Parts: "+state.parts+" · Medicine: "+state.medicine+" · Ammunition: "+state.ammo+" · Clothing: "+state.clothing+" · Oxen: "+state.oxen}
-const pioneerNames=["Eliza","Hyrum","Sarah","Joseph","Mary","Lucy","Emma","Brigham","Heber","Anna","William","Clara","Samuel","Rachel","Ezra","Martha","Thomas","Jane","Benjamin","Abigail","Levi","Hannah","Isaac","Rebecca"];
-function randomFamily(){const names=[...pioneerNames].sort(()=>Math.random()-.5);return names.slice(0,5).map(name=>({name,health:100,alive:true}))}
+const itemIcons={food:"🥖",parts:"🛠️",medicine:"🩺",ammo:"🎯",clothing:"🧥",oxen:"🐂"};
+function shopView(){
+ drawStore();normalizeCompany();
+ const summary=$("storeSummary"),items=$("storeItems");
+ summary.textContent=state.captain+" · "+state.profession+" · "+state.wealth+" means · "+(state.transport==="handcart"?"Handcart":"Covered wagon")+" · "+state.company.map(p=>p.name).join(", ");
+ items.replaceChildren();
+ goods.forEach(g=>{
+  const row=document.createElement("div");row.className="shop-item";
+  const icon=document.createElement("span");icon.className="shop-icon";icon.textContent=itemIcons[g[0]]||"📦";
+  const details=document.createElement("div");details.className="shop-description";
+  const name=document.createElement("strong");name.textContent=g[1];
+  const price=document.createElement("small");price.textContent="$"+storePrice(g)+" · "+g[3]+" lbs cargo";
+  details.append(name,price);
+  const buy=document.createElement("button");buy.textContent="Add +";buy.setAttribute("aria-label","Buy "+g[1]);
+  buy.disabled=state.cash<storePrice(g)||weight()+g[3]>capacity()||(g[0]==="oxen"&&state.transport==="handcart");
+  buy.onclick=()=>{
+   if(buy.disabled)return;
+   state.cash-=storePrice(g);state[g[0]]+=g[0]==="food"?25:g[0]==="ammo"?20:1;
+   shopView();
+  };
+  row.append(icon,details,buy);items.append(row);
+ });
+ $("storeWeight").textContent="💰 $"+state.cash+" remaining  ·  📦 "+Math.round(weight())+" / "+capacity()+" lbs  ·  🍞 "+state.food+" lbs food";
+}
 function start(){
  const difficulty=$("difficulty").value,outfit=$("outfit").value;
  const professions=["farmer","carpenter","doctor","merchant","teacher"];

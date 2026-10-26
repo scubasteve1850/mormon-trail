@@ -243,11 +243,11 @@ body:has(#storyIntro:not(.hidden)){padding:0!important;margin:0!important;backgr
 body:has(#storyIntro:not(.hidden)) main{padding:0!important;margin:0!important;max-width:none!important;width:100%!important;height:100dvh}
 body:has(#storyIntro:not(.hidden)) header,body:has(#storyIntro:not(.hidden)) .soundbar,body:has(#storyIntro:not(.hidden)) footer{display:none!important}
 #storyIntro.story-intro:not(.hidden){position:relative;display:flex;flex-direction:column;height:100dvh;overflow:hidden;isolation:isolate;background:#132b31}
-.story-intro-bg{position:absolute;inset:0;z-index:-1;background-color:#0b1d24;background-image:linear-gradient(180deg,#08191e00 0%,#08191e08 22%,#08191e99 42%,#08191ee8 67%,#08191ef5 100%),var(--story-art,url("assets/title-screen.webp")),var(--story-art,url("assets/title-screen.webp"));background-position:center top,center top,center center;background-size:100% 100%,100% auto,cover;background-repeat:no-repeat}
+.story-intro-bg{position:absolute;inset:0;z-index:-1;background-color:#0b1d24;background-image:linear-gradient(180deg,#08191e00 0%,#08191e00 23%,#08191e55 40%,#08191e 66%,#08191e 100%),var(--story-art,url("assets/title-screen.webp"));background-position:center top,center top;background-size:100% 100%,100% auto;background-repeat:no-repeat}
 .story-intro-content{height:100%;display:flex;flex-direction:column;padding:max(18px,env(safe-area-inset-top)) 18px max(22px,env(safe-area-inset-bottom));width:min(100%,540px);margin:0 auto}
 .story-intro-top{display:flex;justify-content:space-between;align-items:center;gap:12px;color:#ffe2a1;font-size:12px;font-weight:900;letter-spacing:.08em}.story-intro-top>span{white-space:nowrap}
-#storySkip{width:auto!important;flex:0 0 auto;min-height:38px;padding:7px 12px;background:#142e36cc;color:#ffe8b8;border:1px solid #caa367;border-radius:12px;font-size:13px;box-shadow:none}
-.story-intro-panel{margin-top:auto;margin-bottom:clamp(20px,5dvh,55px);background:linear-gradient(145deg,#153b40f5,#10272df9);border:2px solid #c49a56;border-radius:18px;padding:clamp(16px,4vw,26px);box-shadow:0 7px 0 #634221,0 14px 30px #0009}
+#storySkip{position:absolute;top:9px;right:12px;width:auto!important;flex:0 0 auto;min-height:38px;padding:7px 12px;background:#142e36cc;color:#ffe8b8;border:1px solid #caa367;border-radius:12px;font-size:13px;box-shadow:none}
+.story-intro-panel{position:relative;margin-top:auto;margin-bottom:clamp(20px,5dvh,55px);background:linear-gradient(145deg,#153b40f5,#10272df9);border:2px solid #c49a56;border-radius:18px;padding:clamp(16px,4vw,26px);box-shadow:0 7px 0 #634221,0 14px 30px #0009}
 .story-intro-count{color:#f2d18b;font-size:11px;letter-spacing:.15em;font-weight:900}
 .story-intro-panel h2{font-family:Georgia,serif;color:#ffe3a3;font-size:clamp(24px,7vw,35px);line-height:1.1;margin:9px 0 12px;text-shadow:0 3px #68431d}
 .story-intro-panel p{color:#fff2dc;font-size:clamp(15px,4vw,18px);line-height:1.55;margin:0;min-height:9em}
@@ -270,9 +270,9 @@ body:has(#storyIntro:not(.hidden)) header,body:has(#storyIntro:not(.hidden)) .so
 <section id="storyIntro" class="story-intro hidden" aria-label="Farewell to Nauvoo historical introduction">
  <div class="story-intro-bg"></div>
  <div class="story-intro-content">
-  <div class="story-intro-top"><span>CHAPTER 01</span><button type="button" id="storySkip">Skip story ›</button></div>
+  <div class="story-intro-top"><span>CHAPTER 01</span></div>
   <div class="story-intro-panel" aria-live="polite">
-   <div class="story-intro-count" id="storyCount">1 OF 4</div>
+   <button type="button" id="storySkip">Skip story ›</button><div class="story-intro-count" id="storyCount">1 OF 4</div>
    <h2 id="storyHeading">FAREWELL TO NAUVOO</h2>
    <p id="storyText"></p>
    <div class="story-intro-progress" id="storyProgress" aria-label="Story progress"></div>

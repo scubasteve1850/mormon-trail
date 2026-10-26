@@ -165,3 +165,15 @@ state=fixture();normalizeCompany();for(const scale of [.94,.97,1.13,1.16])for(le
 `,c);
 assert.equal(canvasDepth,0);
 console.log('PASS: reachable human leg lengths for all walking sizes over complete gait cycles; balanced canvas state.');
+
+// Textured family rigs: continuous contacts, normal idle poses, reachable joints, complete assets.
+for(const preference of [false,true]){reduced=preference;vm.runInContext(`{
+state=fixture();normalizeCompany();for(const scale of [.7,.94,.97,1.13,1.16])for(const activity of [0,.15,.5,1])for(let i=0;i<=240;i++){const pose=familyWalkPose(i*Math.PI/120,activity,scale);for(const p of [pose.near,pose.far]){assert.ok([p.hip,p.knee,p.ankle].flat().every(Number.isFinite));assert.ok(Math.abs(Math.hypot(p.knee[0]-p.hip[0],p.knee[1]-p.hip[1])-18.4)<1e-7);assert.ok(Math.abs(Math.hypot(p.knee[0]-p.ankle[0],p.knee[1]-p.ankle[1])-17.4)<1e-7)}}
+assert.deepEqual(familyWalkPose(0,0),familyWalkPose(2.5,0),'Idle was frozen in a stride');
+const eps=.00001;for(const boundary of [.62,1]){const at=boundary*Math.PI*2,left=rigStride(at-eps,12.25,5.5),middle=rigStride(at,12.25,5.5),right=rigStride(at+eps,12.25,5.5);assert.ok(Math.abs(left.x-right.x)<.001);const before=(middle.x-left.x)/eps,after=(right.x-middle.x)/eps;assert.ok(Math.abs(before-after)<.01,'Foot velocity jumps at contact');assert.ok(Math.abs(left.lift-right.lift)<.001)}
+for(const scale of [.94,.97,1.13,1.16]){const time=.17,dt=.0001,a=rigStride(time*HUMAN_WALK_RATE,TRAIL_WALK_SPEED*Math.PI*2*.62/HUMAN_WALK_RATE/scale,5.5),b=rigStride((time+dt)*HUMAN_WALK_RATE,TRAIL_WALK_SPEED*Math.PI*2*.62/HUMAN_WALK_RATE/scale,5.5);assert.ok(a.stance&&b.stance);assert.ok(Math.abs((b.x-a.x)*scale/dt+TRAIL_WALK_SPEED)<.05,'Planted foot slides relative to the road')}
+for(let i=0;i<5;i++){assert.equal(familyRigSpecs[i].name,['captain','eliza','joseph','sarah','hyrum'][i]);for(const activity of [0,.5,1])for(const phase of [0,1,2,3,4,5,6.283185]){assert.equal(drawTexturedPioneer($('scene').getContext('2d'),100,180,phase,1,i,activity),true)}}
+}`,c);}
+for(const name of ['captain','eliza','joseph','sarah','hyrum']){const file=path.join(__dirname,'../assets/family/rig-'+name+'-v19.webp'),bytes=fs.readFileSync(file);assert.ok(bytes.length>10000);assert.equal(bytes.toString('ascii',0,4),'RIFF');assert.equal(bytes.toString('ascii',8,12),'WEBP');assert.equal(bytes.toString('ascii',12,16),'VP8X');assert.equal(bytes.readUIntLE(24,3)+1,1536);assert.equal(bytes.readUIntLE(27,3)+1,1024);assert.ok(bytes[20]&16,'Rig image has no alpha channel')}
+assert.equal(canvasDepth,0);
+console.log('PASS: five transparent textured rigs; all joint lengths at walking/idle speeds; continuous foot position/velocity at both cycle boundaries; ground-matched stance; reduced motion and balanced canvas state.');

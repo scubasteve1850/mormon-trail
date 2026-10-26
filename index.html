@@ -56,12 +56,12 @@ function hunt(){
  const leave=document.createElement("button");leave.style.flex="0 0 auto";leave.textContent="Return to Wagon";leave.onclick=finish;$("actions").append(leave);
  setTimeout(finish,18000);
 }
-function river(){
- pending=true;const depth=2+Math.round(Math.random()*5);show(name.toUpperCase(),"A swift river blocks the trail. The water is about "+depth+" feet deep. Choose how to cross.",[
+function river(name="River Crossing"){
+ pending=true;normalizeCompany();state.activeRiver=name;const depth=2+Math.round(Math.random()*5);show(name.toUpperCase(),"A swift river blocks the trail. The water is about "+depth+" feet deep. Choose how to cross.",[
  ["Ford the river",()=>cross("ford",depth)],
  ["Caulk and float",()=>cross("float",depth)],
  ["Wait for better conditions (2 days)",()=>{state.day+=2;state.food-=18;state.morale-=2;log("Waited for the river to calm.");river(name)}],
- ["Hire a guide (trade 35 lbs food)",()=>{if(state.food<35){log("Not enough provisions for a guide.");controls();return}state.food-=35;state.morale+=4;state.crossedRivers.push(name);log("A guide helped the company cross safely.");controls()}]
+ ["Hire a guide (trade 35 lbs food)",()=>{if(state.food<35){show("Not Enough Food","The guide requires 35 lbs of food.",[["Choose Another Crossing",()=>river(name)]]);return}state.food-=35;state.morale+=4;state.crossedRivers.push(name);log("A guide helped the company cross safely.");controls()}]
  ]);render();
 }
 function cross(method,depth){

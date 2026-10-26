@@ -237,6 +237,23 @@ body:has(#setup:not(.hidden)) #setup.setup-adventure{display:block!important;pos
 .setup-chapter{text-align:right;flex:1;font-size:clamp(9px,2.5vw,12px);line-height:1.2}
 .setup-intro{padding-bottom:16px}
 @media(max-height:720px){.setup-intro{padding-bottom:8px}.setup-card{gap:8px}}
+
+/* Historical prologue: short, skippable, readable on mobile */
+body:has(#storyIntro:not(.hidden)){padding:0!important;margin:0!important;background:#091b24;overflow:hidden;height:100dvh}
+body:has(#storyIntro:not(.hidden)) main{padding:0!important;margin:0!important;max-width:none!important;width:100%!important;height:100dvh}
+body:has(#storyIntro:not(.hidden)) header,body:has(#storyIntro:not(.hidden)) .soundbar,body:has(#storyIntro:not(.hidden)) footer{display:none!important}
+#storyIntro.story-intro:not(.hidden){position:relative;display:flex;flex-direction:column;height:100dvh;overflow:hidden;isolation:isolate;background:#132b31}
+.story-intro-bg{position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,#0b1d2440 5%,#0b1d2444 35%,#08191edb 77%,#08191ef5 100%),url("assets/nauvoo-departure.webp") center/cover no-repeat}
+.story-intro-content{height:100%;display:flex;flex-direction:column;padding:max(18px,env(safe-area-inset-top)) 18px max(22px,env(safe-area-inset-bottom));width:min(100%,540px);margin:0 auto}
+.story-intro-top{display:flex;justify-content:space-between;align-items:center;gap:12px;color:#ffe2a1;font-size:12px;font-weight:900;letter-spacing:.12em}
+#storySkip{width:auto!important;min-height:38px;padding:7px 12px;background:#142e36cc;color:#ffe8b8;border:1px solid #caa367;border-radius:12px;font-size:13px;box-shadow:none}
+.story-intro-panel{margin-top:auto;margin-bottom:clamp(20px,5dvh,55px);background:linear-gradient(145deg,#153b40f5,#10272df9);border:2px solid #c49a56;border-radius:18px;padding:clamp(16px,4vw,26px);box-shadow:0 7px 0 #634221,0 14px 30px #0009}
+.story-intro-count{color:#f2d18b;font-size:11px;letter-spacing:.15em;font-weight:900}
+.story-intro-panel h2{font-family:Georgia,serif;color:#ffe3a3;font-size:clamp(24px,7vw,35px);line-height:1.1;margin:9px 0 12px;text-shadow:0 3px #68431d}
+.story-intro-panel p{color:#fff2dc;font-size:clamp(15px,4vw,18px);line-height:1.55;margin:0;min-height:9em}
+.story-intro-progress{color:#eec574;text-align:center;letter-spacing:.35em;margin:12px 0}
+#storyNext{width:100%;min-height:52px;background:linear-gradient(#e8b962,#a86a2d);border:2px solid #ffe5a3;color:#fff6df;border-radius:12px;font-weight:900;font-size:clamp(13px,3.7vw,17px);text-shadow:0 2px #6b431f}
+@media(max-height:650px){.story-intro-panel{padding:12px;margin-bottom:8px}.story-intro-panel p{font-size:14px;min-height:0;line-height:1.4}.story-intro-panel h2{font-size:22px}.story-intro-progress{margin:5px}}
 </style></head><body><main><header><h1>THE MORMON TRAIL</h1><p>✦ ZION OR BUST! ✦</p></header>
 <div class="soundbar"><button id="globalMusic" type="button">♪ Start Music</button><button id="soundTest" type="button">Test Sound</button><label>Volume <input id="volume" type="range" min="0" max="100" value="85"></label><span id="soundStatus" role="status">Music starts after tapping Play</span></div><section id="welcome" class="welcome-screen" aria-label="The Mormon Trail home screen">
  <div class="title-art-stage">
@@ -248,6 +265,19 @@ body:has(#setup:not(.hidden)) #setup.setup-adventure{display:block!important;pos
   <button id="welcomeMusic" class="title-hit title-music" aria-label="Toggle music" aria-pressed="false"><span>Music</span></button>
   <button id="welcomeAchievements" class="title-hit title-achievements" aria-label="Achievements"><span>Achievements</span></button>
   <button id="welcomeCredits" class="title-hit title-credits" aria-label="Credits"><span>Credits</span></button>
+ </div>
+</section>
+<section id="storyIntro" class="story-intro hidden" aria-label="Farewell to Nauvoo historical introduction">
+ <div class="story-intro-bg"></div>
+ <div class="story-intro-content">
+  <div class="story-intro-top"><span>CHAPTER 01</span><button type="button" id="storySkip">Skip story ›</button></div>
+  <div class="story-intro-panel" aria-live="polite">
+   <div class="story-intro-count" id="storyCount">1 OF 4</div>
+   <h2 id="storyHeading">FAREWELL TO NAUVOO</h2>
+   <p id="storyText"></p>
+   <div class="story-intro-progress" id="storyProgress" aria-label="Story progress"></div>
+   <button id="storyNext" type="button">CONTINUE THE STORY ➜</button>
+  </div>
  </div>
 </section>
 <section id="setup" class="setup-adventure hidden" aria-label="Prepare your pioneer company">
@@ -397,8 +427,18 @@ function start(){
  if(profession==="carpenter")state.parts+=2;if(profession==="doctor")state.medicine+=2;
  if(difficulty==="easy")state.food+=80;if(difficulty==="hard")state.food-=50;
  log(state.captain+" joins the trail as a "+profession+" with "+wealth+" means and a "+outfit+" supply bundle. "+(transport==="handcart"?"A wagon outfit is beyond the family's budget, so they travel by handcart.":"The family can afford a covered wagon."));
- $("setup").classList.add("hidden");$("welcome").classList.add("hidden");$("store").classList.remove("hidden");shopView();
+ $("setup").classList.add("hidden");$("welcome").classList.add("hidden");showStory();
 }
+const storyPages=[
+ {title:"FAREWELL TO NAUVOO",text:"Nauvoo, Illinois. February 1846. Your family has built a life beside the Mississippi River. Homes, shops and farms surround the beautiful temple rising above the city."},
+ {title:"DRIVEN FROM HOME",text:"For years, religious hostility and violence have threatened the Latter-day Saints. After the killing of Joseph and Hyrum Smith in 1844, pressure to leave has grown. Church leaders have organized a journey west, hoping to find a place to live in peace."},
+ {title:"A TEMPLE LEFT BEHIND",text:"The Nauvoo Temple is still being finished as the first wagons depart. Many Saints have worked and sacrificed to build it. They leave before its formal dedication in May 1846, uncertain whether they will ever return."},
+ {title:"YOUR JOURNEY BEGINS",text:"Winter winds blow across the river. Your family's belongings must fit in a wagon—or a handcart, if money is scarce. You cannot take everything. But you can carry courage, hope and each other. First stop: the general store."}
+];
+let storyPage=0;
+function showStory(){storyPage=0;$("store").classList.add("hidden");$("storyIntro").classList.remove("hidden");renderStory()}
+function renderStory(){const page=storyPages[storyPage];$("storyHeading").textContent=page.title;$("storyText").textContent=page.text;$("storyCount").textContent=(storyPage+1)+" OF "+storyPages.length;$("storyProgress").textContent=storyPages.map((_,i)=>i===storyPage?"◆":"◇").join("  ");$("storyNext").textContent=storyPage===storyPages.length-1?"VISIT THE GENERAL STORE ➜":"CONTINUE THE STORY ➜"}
+function finishStory(){$("storyIntro").classList.add("hidden");$("store").classList.remove("hidden");shopView()}
 function depart(){if(state.food<50){alert("You need at least 50 lbs of food to depart.");return}if(state.transport==="wagon"&&state.oxen<2){alert("A wagon needs at least two oxen.");return}$("store").classList.add("hidden");log("Purchased provisions and departed Nauvoo.");controls()}
 function reset(){state=null;$("game").classList.add("hidden");$("store").classList.add("hidden");$("setup").classList.add("hidden");$("welcome").classList.remove("hidden")}
 function save(){if(!state)return;try{localStorage.setItem(SAVE,JSON.stringify(state));log("Journey saved to this browser.");render()}catch(e){alert("Saving unavailable in this browser.")}}
@@ -521,5 +561,5 @@ $("welcomeMusic").onclick=toggleMusic;
 $("welcomeSettings").onclick=()=>{const value=prompt("Music volume (0-100)",$("volume").value);if(value!==null&&value.trim()!==""&&!isNaN(Number(value))){$("volume").value=Math.max(0,Math.min(100,Number(value)));$("volume").dispatchEvent(new Event("input"))}};
 $("welcomeAchievements").onclick=()=>alert("Achievements are earned as you survive the trail. More achievements are coming soon!");
 $("welcomeCredits").onclick=()=>alert("The Mormon Trail: Zion or Bust!\\nAn original, fan-made historical adventure. Not affiliated with The Church of Jesus Christ of Latter-day Saints.");
-$("musicToggle").onclick=toggleMusic;$("globalMusic").onclick=toggleMusic;$("soundTest").onclick=testSound;$("volume").oninput=()=>{if(masterGain)masterGain.gain.value=Number($("volume").value)/100};$("start").onclick=start;$("depart").onclick=depart;$("backSetup").onclick=reset;$("save").onclick=save;$("loadStart").onclick=load;$("restart").onclick=reset;
+$("storyNext").onclick=()=>{if(storyPage<storyPages.length-1){storyPage++;renderStory()}else finishStory()};$("storySkip").onclick=finishStory;$("musicToggle").onclick=toggleMusic;$("globalMusic").onclick=toggleMusic;$("soundTest").onclick=testSound;$("volume").oninput=()=>{if(masterGain)masterGain.gain.value=Number($("volume").value)/100};$("start").onclick=start;$("depart").onclick=depart;$("backSetup").onclick=reset;$("save").onclick=save;$("loadStart").onclick=load;$("restart").onclick=reset;
 </script></body></html>

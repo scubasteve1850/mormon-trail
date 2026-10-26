@@ -197,6 +197,38 @@ body:has(#welcome:not(.hidden)) #welcome{padding:0!important;margin:0!important;
 .title-credits{left:69.5%;top:88.3%;width:20%!important;height:8.5%!important}
 @media(max-aspect-ratio:2/3){.title-art-stage{height:100dvh;width:66.6667dvh}}
 @media(min-aspect-ratio:2/3){.title-art-stage{width:100vw;height:150vw}}
+
+/* Journey setup: cinematic illustrated environment + legible interactive HUD */
+body:has(#setup:not(.hidden)){background:#091c22!important;overflow:hidden!important;height:100dvh!important;padding:0!important}
+body:has(#setup:not(.hidden)) main{height:100dvh!important;max-width:none!important;width:100%!important;margin:0!important;padding:0!important;overflow:hidden!important}
+body:has(#setup:not(.hidden)) header,body:has(#setup:not(.hidden)) .soundbar,body:has(#setup:not(.hidden)) footer{display:none!important}
+body:has(#setup:not(.hidden)) #setup.setup-adventure{display:block!important;position:relative!important;width:100%!important;height:100dvh!important;min-height:0!important;overflow:hidden!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:#10262b!important}
+.setup-scene{position:absolute;inset:0;background-image:linear-gradient(180deg,#0b203040 0%,#0a1e2477 38%,#0b1c20ec 65%,#08181cfb 100%),url("assets/title-screen.webp");background-position:center,center 42%;background-size:cover;filter:saturate(.9);pointer-events:none}
+.setup-shell{position:relative;z-index:1;height:100%;width:min(100%,540px);margin:auto;display:flex;flex-direction:column;padding:max(12px,env(safe-area-inset-top)) 17px max(12px,env(safe-area-inset-bottom));gap:0}
+.setup-topbar{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.setup-adventure .setup-back{background:#122e35bf!important;border:1px solid #e7b96c!important;color:#fff3d5!important;box-shadow:none!important;border-radius:10px!important;min-height:38px!important;width:auto!important;padding:5px 12px!important;font-size:19px!important;font-weight:800!important}
+.setup-back span{font-size:12px;letter-spacing:.08em}
+.setup-chapter{font-size:clamp(10px,2.5vw,12px);letter-spacing:.08em;color:#ffe3ac;text-shadow:0 2px 5px #000;font-weight:800}
+.setup-intro{margin-top:auto;text-align:center;text-shadow:0 3px 8px #000b;padding-bottom:12px}
+.setup-kicker{font-size:clamp(10px,2.5vw,13px);font-weight:900;letter-spacing:.24em;color:#ffdd94}
+.setup-intro h2{font-family:Georgia,serif;font-size:clamp(29px,8vw,44px);line-height:1.05;margin:5px 0;color:#ffdf91;text-shadow:0 3px #69401e,0 5px 12px #000}
+.setup-intro p{margin:0;font-size:clamp(12px,3vw,15px);color:#fff0d8}
+.setup-card{background:linear-gradient(155deg,#183b42f5,#0e272bf9);border:2px solid #c69755;border-radius:18px;box-shadow:0 8px 0 #624424,0 15px 35px #000a;padding:clamp(11px,2.8dvh,20px);display:flex;flex-direction:column;gap:clamp(7px,1.3dvh,12px)}
+.setup-card-heading{display:flex;align-items:center;gap:10px;border-bottom:1px solid #9e845b;padding-bottom:8px}
+.setup-card-heading strong{display:block;color:#f8d58f;font-family:Georgia,serif;font-size:clamp(15px,4vw,21px)}
+.setup-card-heading small{display:block;color:#c7d7d1;font-size:11px;margin-top:2px}
+.setup-seal{font-size:25px;color:#f5cc78}
+.setup-field{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:4px!important;margin:0!important}
+.setup-field>span{font-size:clamp(10px,2.5vw,12px);font-weight:900;letter-spacing:.08em;color:#f3d7a1}
+.setup-field input,.setup-field select{display:block!important;width:100%!important;max-width:none!important;min-height:clamp(38px,5.8dvh,49px)!important;padding:8px 11px!important;background:#f9eed7!important;color:#26322d!important;border:2px solid #c8a36b!important;border-radius:10px!important;font-family:system-ui,-apple-system,sans-serif!important;font-size:clamp(13px,3.5vw,16px)!important;box-sizing:border-box}
+.setup-surprise{display:flex;align-items:center;gap:10px;background:#315451b0;border:1px solid #799b82;border-radius:11px;padding:9px}
+.setup-dice{font-size:26px;flex:0 0 auto}
+.setup-surprise p{font-size:clamp(11px,2.7vw,13px);line-height:1.3;margin:0;color:#e5eadc}
+.setup-surprise strong{color:#ffdf9a}
+.setup-adventure #start.setup-go{display:flex!important;justify-content:center;align-items:center;gap:12px;width:100%!important;min-height:clamp(44px,7dvh,60px)!important;margin:0!important;padding:8px!important;border:2px solid #ffe4a0!important;border-radius:12px!important;background:linear-gradient(#e4ad50,#a36a2d)!important;color:#fff6db!important;font-size:clamp(13px,3.7vw,17px)!important;font-weight:900!important;text-shadow:0 2px 2px #523313!important;box-shadow:0 4px 0 #67401f!important}
+.setup-adventure #loadStart.setup-load{width:100%!important;margin:0!important;min-height:30px!important;padding:3px!important;border:0!important;background:transparent!important;color:#e8d7b4!important;box-shadow:none!important;font-size:12px!important;text-decoration:underline}
+@media(max-height:720px){.setup-shell{padding-top:8px;padding-bottom:8px}.setup-intro{padding-bottom:7px}.setup-card{gap:5px;padding:9px}.setup-card-heading{padding-bottom:4px}.setup-surprise{padding:5px}.setup-intro h2{font-size:27px}.setup-field input,.setup-field select{min-height:35px!important}}
+@media(max-width:350px){.setup-shell{padding-left:10px;padding-right:10px}.setup-card-heading small{display:none}}
 </style></head><body><main><header><h1>THE MORMON TRAIL</h1><p>✦ ZION OR BUST! ✦</p></header>
 <div class="soundbar"><button id="globalMusic" type="button">♪ Start Music</button><button id="soundTest" type="button">Test Sound</button><label>Volume <input id="volume" type="range" min="0" max="100" value="85"></label><span id="soundStatus" role="status">Music starts after tapping Play</span></div><section id="welcome" class="welcome-screen" aria-label="The Mormon Trail home screen">
  <div class="title-art-stage">
@@ -210,7 +242,22 @@ body:has(#welcome:not(.hidden)) #welcome{padding:0!important;margin:0!important;
   <button id="welcomeCredits" class="title-hit title-credits" aria-label="Credits"><span>Credits</span></button>
  </div>
 </section>
-<section id="setup" class="panel hidden"><div class="setup-content"><button type="button" id="setupBack" class="setup-back">← Back</button><h2>🌄 Begin your adventure · Nauvoo, 1846</h2><p>Lead your fictional pioneer company to the Salt Lake Valley. Manage food, supplies, health and morale.</p><p><label>Captain's name <input id="captain" maxlength="28" value="Captain Jensen"></label></p><p><label>Difficulty <select id="difficulty"><option value="easy">Sunday Stroll</option><option value="normal" selected>Pioneer Spirit</option><option value="hard">Zion or Bust!</option></select></label></p><p><label>Starting outfit <select id="outfit"><option value="balanced">Balanced — food, tools, and medicine</option><option value="provisions">More food, fewer repairs</option><option value="tools">More tools and medicine, less food</option></select></label></p><p><strong>🎲 Surprise pioneer company!</strong> Your profession, family, wealth and wagon or handcart are assigned randomly. Families unable to afford a wagon travel by handcart.</p><button id="start">Begin Journey →</button><button id="loadStart">Load Saved Journey</button></div></section>
+<section id="setup" class="setup-adventure hidden" aria-label="Prepare your pioneer company">
+ <div class="setup-scene" aria-hidden="true"></div>
+ <div class="setup-shell">
+  <div class="setup-topbar"><button type="button" id="setupBack" class="setup-back" aria-label="Return to main menu">‹ <span>MENU</span></button><span class="setup-chapter">CHAPTER 01 · NAUVOO, 1846</span></div>
+  <div class="setup-intro"><span class="setup-kicker">YOUR STORY BEGINS</span><h2>THE JOURNEY WEST</h2><p>One family. A thousand miles. A lifetime of stories.</p></div>
+  <div class="setup-card">
+   <div class="setup-card-heading"><span class="setup-seal">✦</span><div><strong>PREPARE YOUR COMPANY</strong><small>Every adventure begins with a choice.</small></div></div>
+   <label class="setup-field"><span>CAPTAIN'S NAME</span><input id="captain" maxlength="28" value="Captain Jensen" autocomplete="off"></label>
+   <label class="setup-field"><span>TRAIL DIFFICULTY</span><select id="difficulty"><option value="easy">Sunday Stroll · Easy</option><option value="normal" selected>Pioneer Spirit · Normal</option><option value="hard">Zion or Bust! · Hard</option></select></label>
+   <label class="setup-field"><span>STARTING SUPPLIES</span><select id="outfit"><option value="balanced">Balanced · Food, tools & medicine</option><option value="provisions">Extra provisions · Less equipment</option><option value="tools">Extra tools · Less food</option></select></label>
+   <div class="setup-surprise"><span class="setup-dice">🎲</span><p><strong>A surprise awaits!</strong> Your family, profession and fortune are randomly assigned. Those who cannot afford a wagon travel by handcart.</p></div>
+   <button id="start" class="setup-go">BEGIN YOUR ADVENTURE <span aria-hidden="true">➜</span></button>
+   <button id="loadStart" class="setup-load">Continue a saved journey</button>
+  </div>
+ </div>
+</section>
 <section id="store" class="panel hidden"><canvas id="storeArt" width="640" height="260" aria-label="Pixel-art frontier general store with shopkeeper, shelves, and supplies"></canvas><h2>NAUVOO GENERAL STORE</h2><p id="storeSummary"></p><div id="storeItems"></div><p id="storeWeight"></p><button id="depart">Depart for the West →</button><button id="backSetup">← Change Company</button></section><section id="game" class="hidden"><div class="panel" style="display:flex;align-items:center;justify-content:space-between;gap:8px"><span>♪ TRAIL SOUNDTRACK <small id="trackName">Original Frontier Theme</small></span><button id="musicToggle" aria-pressed="false">Music: Off</button></div><canvas id="scene" width="640" height="250" aria-label="Pixel art of a pioneer wagon crossing the plains"></canvas>
 <div id="gameControls"><nav id="gameTabs" aria-label="Game panels"><button type="button" data-tab="travel" class="selected">🧭 Trail</button><button type="button" data-tab="supplies">🎒 Gear</button><button type="button" data-tab="map">🗺️ Map</button><button type="button" data-tab="journal">📖 Story</button></nav><div id="travelPanel"><div class="panel"><div class="grid" id="stats"></div><p id="map"></p><div class="journey-progress" role="progressbar" aria-label="Journey completed" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="journeyFill"></div></div></div><section class="panel"><h2 id="eventTitle">On the Trail</h2><p id="story"></p><div id="actions"></div></section></div><section id="suppliesPanel" class="panel hidden"><h2>Meet Your Company</h2><div id="familyCards"></div><h3>🎒 Supplies</h3><div id="suppliesList"></div></section><section id="mapPanel" class="panel hidden"><h2>TRAIL MAP</h2><canvas id="trailMap" width="640" height="185" aria-label="Map of trail progress"></canvas><p id="mapLegend"></p></section><section id="journalPanel" class="panel hidden"><h3>Trail Journal</h3><div id="log" aria-live="polite"></div><button id="save">Save Journey</button><button id="restart">New Journey</button></section></div></section><footer><small>Original fan-made historical fiction; not affiliated with The Church of Jesus Christ of Latter-day Saints. Your saved game stays in this browser.</small></footer></main>
 <script>

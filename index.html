@@ -175,7 +175,7 @@ body:has(#welcome:not(.hidden)) header,body:has(#welcome:not(.hidden)) .soundbar
 .welcome-actions .welcome-tertiary{background:linear-gradient(#7a5133,#493023);border:2px solid #d2a65e;color:#fff1ce}
 .welcome-actions .welcome-audio{position:absolute;top:max(14px,env(safe-area-inset-top));right:14px;width:auto;min-height:37px;padding:7px 12px;font-size:12px;border-radius:100px;background:#112f3fcf;border:1px solid #e6c787;color:#fff4d7;box-shadow:0 3px 12px #0005}
 .welcome-credit{text-align:center;font-size:clamp(10px,2.5vw,12px);color:#e6ddc9;margin:0;text-shadow:0 2px 5px #000}
-body:has(#setup:not(.hidden)) #setup{height:100dvh;overflow:auto;margin:0;border-radius:0;display:block}
+body:has(#setup:not(.hidden)){height:100dvh;overflow:hidden;padding:0}body:has(#setup:not(.hidden)) main{height:100dvh}body:has(#setup:not(.hidden)) header,body:has(#setup:not(.hidden)) .soundbar,body:has(#setup:not(.hidden)) footer{display:none}body:has(#setup:not(.hidden)) #setup{height:100dvh;overflow:auto;margin:0;border-radius:0;display:block}
 body:has(#setup:not(.hidden)) #setup .setup-content{max-width:520px;margin:0 auto;padding:20px}
 body:has(#setup:not(.hidden)) #setup .setup-back{width:auto;background:#295b56;color:#fff}
 @media(max-height:680px){.welcome-actions{gap:6px;padding-bottom:6px}.welcome-actions button{min-height:45px}.welcome-logo{top:9dvh}}
@@ -325,7 +325,7 @@ function start(){
  $("setup").classList.add("hidden");$("welcome").classList.add("hidden");$("store").classList.remove("hidden");shopView();
 }
 function depart(){if(state.food<50){alert("You need at least 50 lbs of food to depart.");return}if(state.transport==="wagon"&&state.oxen<2){alert("A wagon needs at least two oxen.");return}$("store").classList.add("hidden");log("Purchased provisions and departed Nauvoo.");controls()}
-function reset(){state=null;$("game").classList.add("hidden");$("store").classList.add("hidden");$("setup").classList.remove("hidden")}
+function reset(){state=null;$("game").classList.add("hidden");$("store").classList.add("hidden");$("setup").classList.add("hidden");$("welcome").classList.remove("hidden")}
 function save(){if(!state)return;try{localStorage.setItem(SAVE,JSON.stringify(state));log("Journey saved to this browser.");render()}catch(e){alert("Saving unavailable in this browser.")}}
 function load(){try{let s=JSON.parse(localStorage.getItem(SAVE));if(!s||!Array.isArray(s.journal)||typeof s.miles!=="number")throw Error();state=s;normalizeCompany();log("Resumed saved journey.");controls()}catch(e){alert("No valid saved journey was found.")}}
 let audioCtx=null,musicOn=false,musicTimer=null,noteIndex=0,currentCue="travel";let masterGain=null;

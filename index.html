@@ -499,8 +499,8 @@ const storyPages=[
 ];
 let storyPage=0;
 function showStory(){storyPage=0;$("store").classList.add("hidden");$("storyIntro").classList.remove("hidden");renderStory()}
-function renderStory(){const page=storyPages[storyPage];const scenes=["farewell-nauvoo","driven-from-home","temple-left-behind","journey-begins"];$("storyIntro").style.setProperty("--story-art",`url("assets/${scenes[storyPage]}.webp")`);$("storyIntro").querySelector(".story-intro-top>span").textContent="CHAPTER "+String(storyPage+1).padStart(2,"0");$("storyHeading").textContent=page.title;$("storyText").textContent=page.text;$("storyCount").textContent=(storyPage+1)+" OF "+storyPages.length;$("storyProgress").textContent=storyPages.map((_,i)=>i===storyPage?"◆":"◇").join("  ");$("storyNext").textContent=storyPage===storyPages.length-1?"VISIT THE GENERAL STORE ➜":"CONTINUE THE STORY ➜"}
-function finishStory(){$("storyIntro").classList.add("hidden");$("store").classList.remove("hidden");shopView()}
+function renderStory(){setMusicCue("story");const page=storyPages[storyPage];const scenes=["farewell-nauvoo","driven-from-home","temple-left-behind","journey-begins"];$("storyIntro").style.setProperty("--story-art",`url("assets/${scenes[storyPage]}.webp")`);$("storyIntro").querySelector(".story-intro-top>span").textContent="CHAPTER "+String(storyPage+1).padStart(2,"0");$("storyHeading").textContent=page.title;$("storyText").textContent=page.text;$("storyCount").textContent=(storyPage+1)+" OF "+storyPages.length;$("storyProgress").textContent=storyPages.map((_,i)=>i===storyPage?"◆":"◇").join("  ");$("storyNext").textContent=storyPage===storyPages.length-1?"VISIT THE GENERAL STORE ➜":"CONTINUE THE STORY ➜"}
+function finishStory(){setMusicCue("store");$("storyIntro").classList.add("hidden");$("store").classList.remove("hidden");shopView()}
 function departureWarnings(){
  const people=state.company.length||5,alerts=[];
  if(state.food<150)alerts.push("Food is running low for "+people+" travelers. More provisions could help your family on the trail.");
@@ -521,32 +521,59 @@ function depart(){
  }
  $("store").classList.add("hidden");log("Purchased provisions and departed Nauvoo.");controls()
 }
-function reset(){$("storyIntro").classList.add("hidden");state=null;$("game").classList.add("hidden");$("store").classList.add("hidden");$("setup").classList.add("hidden");$("welcome").classList.remove("hidden")}
+function reset(){setMusicCue("title");$("storyIntro").classList.add("hidden");state=null;$("game").classList.add("hidden");$("store").classList.add("hidden");$("setup").classList.add("hidden");$("welcome").classList.remove("hidden")}
 function save(){if(!state)return;try{localStorage.setItem(SAVE,JSON.stringify(state));log("Journey saved to this browser.");render()}catch(e){alert("Saving unavailable in this browser.")}}
 function load(){try{let s=JSON.parse(localStorage.getItem(SAVE));if(!s||!Array.isArray(s.journal)||typeof s.miles!=="number")throw Error();state=s;normalizeCompany();log("Resumed saved journey.");controls()}catch(e){alert("No valid saved journey was found.")}}
-let audioCtx=null,musicOn=false,musicTimer=null,noteIndex=0,currentCue="travel";let masterGain=null;
+let audioCtx=null,musicOn=false,musicTimer=null,noteIndex=0,currentCue="title",masterGain=null;
 const soundtracks={
- travel:{name:"Frontier Journey · Original",tempo:245,notes:[64,67,69,72,71,69,67,64,62,64,67,69,67,64,62,60],bass:[48,55,53,55]},
- handcart:{name:"Handcart March · Original",tempo:220,notes:[67,69,72,74,72,69,67,64,67,69,72,76,74,72,69,67],bass:[48,53,55,48]},
- camp:{name:"Evening Campfire · Original",tempo:370,notes:[60,64,67,64,62,65,69,65,64,67,72,67,62,64,60,null],bass:[48,53,57,55]},
- hunt:{name:"Prairie Chase · Original",tempo:170,notes:[72,72,67,69,72,74,76,74,72,69,67,69,72,67,64,67],bass:[48,55,53,55]},
- river:{name:"River Crossing · Original",tempo:280,notes:[62,65,69,68,62,65,70,69,65,64,62,null,58,62,65,null],bass:[50,46,48,50]},
- arrival:{name:"Valley Arrival · Original",tempo:350,notes:[60,64,67,72,71,69,67,69,72,76,79,76,72,67,72,null],bass:[48,53,55,48]}
+ title:{name:"Westward Overture · Cinematic",tempo:285,notes:[64,67,69,72,74,72,69,67,64,67,72,76,74,72,69,null],chords:[[48,52,55],[53,57,60],[55,59,62],[48,52,55]],lead:"horn"},
+ story:{name:"Farewell to Nauvoo · Hymn-Inspired",tempo:420,notes:[67,69,72,71,69,67,64,null,65,67,69,72,71,69,67,null],chords:[[48,52,55],[45,48,52],[53,57,60],[55,59,62]],lead:"flute"},
+ store:{name:"The Nauvoo Mercantile · Folk Dance",tempo:240,notes:[67,72,76,72,69,72,76,72,67,71,74,71,65,69,72,null],chords:[[48,52,55],[53,57,60],[55,59,62],[48,52,55]],lead:"pluck"},
+ travel:{name:"Frontier Journey · Orchestral",tempo:245,notes:[64,67,69,72,71,69,67,64,62,64,67,69,67,64,62,60],chords:[[48,52,55],[53,57,60],[55,59,62],[48,52,55]],lead:"horn"},
+ handcart:{name:"Handcart March · Hymn-Inspired",tempo:270,notes:[67,69,72,74,72,69,67,64,67,69,72,76,74,72,69,67],chords:[[48,52,55],[53,57,60],[48,52,55],[55,59,62]],lead:"strings"},
+ camp:{name:"Evening Campfire · Reverie",tempo:390,notes:[60,64,67,64,62,65,69,65,64,67,72,67,62,64,60,null],chords:[[48,52,55],[53,57,60],[45,48,52],[55,59,62]],lead:"flute"},
+ hunt:{name:"Prairie Chase · Adventure",tempo:170,notes:[72,72,67,69,72,74,76,74,72,69,67,69,72,67,64,67],chords:[[48,52,55],[55,59,62],[53,57,60],[55,59,62]],lead:"strings"},
+ river:{name:"River Crossing · Suspense",tempo:280,notes:[62,65,69,68,62,65,70,69,65,64,62,null,58,62,65,null],chords:[[50,53,57],[46,50,53],[48,52,55],[50,53,57]],lead:"horn"},
+ arrival:{name:"Valley Arrival · Triumph",tempo:330,notes:[60,64,67,72,71,69,67,69,72,76,79,76,72,67,72,null],chords:[[48,52,55],[53,57,60],[55,59,62],[48,52,55]],lead:"horn"}
 };
-function synthNote(midi,duration=.25,voice="lead",volume=.04){
+function instrument(midi,start,duration,voice="horn",volume=.03){
  if(!audioCtx||midi==null)return;
- const t=audioCtx.currentTime,o=audioCtx.createOscillator(),g=audioCtx.createGain();
- o.type=voice==="bass"?"sine":voice==="lead"?"triangle":"square";
- o.frequency.value=440*Math.pow(2,(midi-69)/12);
- g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(volume,t+.018);
- g.gain.exponentialRampToValueAtTime(.0001,t+duration);
- o.connect(g).connect(masterGain||audioCtx.destination);o.start(t);o.stop(t+duration+.03);
+ const frequency=440*Math.pow(2,(midi-69)/12),end=start+Math.max(.08,duration),gain=audioCtx.createGain();
+ const attack=voice==="pad"?.18:voice==="horn"?.065:voice==="flute"?.05:.009;
+ gain.gain.setValueAtTime(.0001,start);
+ gain.gain.linearRampToValueAtTime(volume,start+Math.min(attack,duration*.45));
+ gain.gain.setTargetAtTime(.0001,Math.max(start+attack,end-Math.min(.2,duration*.3)),Math.max(.03,duration*.12));
+ const osc=audioCtx.createOscillator();
+ osc.type=voice==="flute"?"sine":voice==="pluck"?"triangle":voice==="pad"?"sawtooth":voice==="strings"?"sawtooth":"triangle";
+ osc.frequency.setValueAtTime(frequency,start);
+ if(voice==="horn"||voice==="strings")osc.frequency.setValueAtTime(frequency*.997,start);
+ const filter=audioCtx.createBiquadFilter();filter.type="lowpass";filter.frequency.value=voice==="pad"?850:voice==="strings"?1800:voice==="horn"?1300:voice==="pluck"?2800:2300;
+ osc.connect(filter).connect(gain).connect(masterGain||audioCtx.destination);
+ osc.start(start);osc.stop(end+.18);
+}
+function percussion(start,kind,volume=.012){
+ if(!audioCtx||!masterGain)return;
+ const osc=audioCtx.createOscillator(),g=audioCtx.createGain();
+ osc.type=kind==="drum"?"sine":"triangle";
+ osc.frequency.setValueAtTime(kind==="drum"?125:450,start);
+ osc.frequency.exponentialRampToValueAtTime(kind==="drum"?55:160,start+.09);
+ g.gain.setValueAtTime(volume,start);g.gain.exponentialRampToValueAtTime(.0001,start+.13);
+ osc.connect(g).connect(masterGain);osc.start(start);osc.stop(start+.14);
 }
 function musicTick(){
- const cue=soundtracks[currentCue],i=noteIndex++,n=cue.notes[i%cue.notes.length];
- synthNote(n,cue.tempo/1000*.85,"lead",.038);
- if(i%4===0)synthNote(cue.bass[Math.floor(i/4)%cue.bass.length]-12,cue.tempo/1000*3.1,"bass",.06);
- if(i%2===1&&currentCue!=="camp")synthNote(cue.bass[Math.floor(i/4)%cue.bass.length]+7,.11,"pulse",.008);
+ if(!musicOn||!audioCtx)return;
+ const cue=soundtracks[currentCue],i=noteIndex++,step=cue.tempo/1000,t=audioCtx.currentTime+.025;
+ const chord=cue.chords[Math.floor(i/4)%cue.chords.length];
+ instrument(cue.notes[i%cue.notes.length],t,step*.9,cue.lead,.033);
+ if(i%4===0){
+  chord.forEach((note,j)=>instrument(note,t,step*3.85,"pad",.0055));
+  instrument(chord[0]-12,t,step*2.4,"horn",.019);
+ }
+ if(i%2===0)instrument(chord[1]+12,t,step*.45,"pluck",.008);
+ if(["travel","handcart","hunt","arrival","store"].includes(currentCue)){
+  if(i%4===0)percussion(t,"drum",currentCue==="hunt"?.018:.01);
+  if(i%4===2)percussion(t,"tap",.006);
+ }
 }
 function setMusicCue(cue){
  if(!soundtracks[cue])cue="travel";
@@ -555,11 +582,13 @@ function setMusicCue(cue){
  const label=$("trackName");if(label)label.textContent=soundtracks[cue].name;
  if(musicTimer){clearInterval(musicTimer);musicTimer=null}
  if(musicOn){musicTick();musicTimer=setInterval(musicTick,soundtracks[cue].tempo)}
+ updateSoundUI();
 }
 function updateSoundUI(message){
  const on=musicOn?"On":"Off";
  $("musicToggle").textContent="Music: "+on;$("musicToggle").setAttribute("aria-pressed",String(musicOn));
- $("globalMusic").textContent=musicOn?"♫ Stop Music":"♪ Start Music";if($("welcomeMusic")){$("welcomeMusic").setAttribute("aria-pressed",String(musicOn))}
+ $("globalMusic").textContent=musicOn?"♫ Stop Music":"♪ Start Music";
+ if($("welcomeMusic"))$("welcomeMusic").setAttribute("aria-pressed",String(musicOn));
  $("soundStatus").textContent=message||("Soundtrack "+on+" · "+soundtracks[currentCue].name);
 }
 async function ensureAudio(){
@@ -579,7 +608,7 @@ async function toggleMusic(){
  }catch(e){musicOn=false;updateSoundUI("Sound unavailable: "+e.message)}
 }
 async function testSound(){
- try{await ensureAudio();synthNote(72,.4,"lead",.25);setTimeout(()=>synthNote(76,.4,"lead",.25),180);setTimeout(()=>synthNote(79,.55,"lead",.25),360);updateSoundUI("Test notes played. If silent, check iPhone Silent Mode and media volume.")}
+ try{await ensureAudio();const t=audioCtx.currentTime+.02;[60,64,67,72].forEach((n,i)=>instrument(n,t+i*.2,.4,"horn",.08));updateSoundUI("Test notes played. If silent, check iPhone Silent Mode and media volume.")}
  catch(e){updateSoundUI("Audio test failed: "+e.message)}
 }
 function drawMap(){
@@ -634,7 +663,7 @@ function draw(now=0){
  if(rainy||cold){ctx.fillStyle=cold?"#f8ffff":"#b7d5e8";for(let i=0;i<48;i++){let x=(i*71+now/(cold?32:11))%w,y=(i*43+now/(cold?60:17))%hh;ctx.fillRect(x,y,cold?3:2,cold?3:13)}}
  const shade=ctx.createLinearGradient(0,0,0,hh);shade.addColorStop(0,"#0d283300");shade.addColorStop(1,"#0d283355");ctx.fillStyle=shade;ctx.fillRect(0,0,w,hh);
 }
-function setTab(tab){for(const t of ["travel","supplies","map","journal"]){$(t+"Panel").classList.toggle("hidden",t!==tab)}document.querySelectorAll("#gameTabs button").forEach(b=>{b.classList.toggle("selected",b.dataset.tab===tab);b.setAttribute("aria-pressed",String(b.dataset.tab===tab))})}document.querySelectorAll("#gameTabs button").forEach(b=>b.onclick=()=>setTab(b.dataset.tab));$("newJourney").onclick=()=>{$("welcome").classList.add("hidden");$("setup").classList.remove("hidden")};
+function setTab(tab){for(const t of ["travel","supplies","map","journal"]){$(t+"Panel").classList.toggle("hidden",t!==tab)}document.querySelectorAll("#gameTabs button").forEach(b=>{b.classList.toggle("selected",b.dataset.tab===tab);b.setAttribute("aria-pressed",String(b.dataset.tab===tab))})}document.querySelectorAll("#gameTabs button").forEach(b=>b.onclick=()=>setTab(b.dataset.tab));$("newJourney").onclick=()=>{setMusicCue("title");$("welcome").classList.add("hidden");$("setup").classList.remove("hidden")};
 $("continueJourney").onclick=load;
 $("setupBack").onclick=()=>{$("setup").classList.add("hidden");$("welcome").classList.remove("hidden")};
 $("howToPlay").onclick=()=>{alert("THE MORMON TRAIL\\n\\nYour family, profession and starting wealth are randomized. Buy supplies, then travel west. Balance food, health, pace and morale. Hunt, rest, trade and cross rivers to reach the Salt Lake Valley. Handcart companies face extra challenges. Good luck!")};

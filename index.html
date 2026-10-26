@@ -158,7 +158,7 @@ body:has(#game:not(.hidden)) main{height:100dvh;overflow:hidden}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
 
-/* Modern app-style home: original cinematic artwork is loaded from assets/title-screen.webp */
+/* Modern app-style home: artwork contains its own title and illustrated controls. */
 body:has(#welcome:not(.hidden)){margin:0;padding:0;background:#0c2631;overflow:hidden;height:100dvh}
 body:has(#welcome:not(.hidden)) main{width:100%;max-width:100%;height:100dvh;overflow:hidden}
 body:has(#welcome:not(.hidden)) header,body:has(#welcome:not(.hidden)) .soundbar,body:has(#welcome:not(.hidden)) footer{display:none}
@@ -179,16 +179,36 @@ body:has(#setup:not(.hidden)){height:100dvh;overflow:hidden;padding:0}body:has(#
 body:has(#setup:not(.hidden)) #setup .setup-content{max-width:520px;margin:0 auto;padding:20px}
 body:has(#setup:not(.hidden)) #setup .setup-back{width:auto;background:#295b56;color:#fff}
 @media(max-height:680px){.welcome-actions{gap:6px;padding-bottom:6px}.welcome-actions button{min-height:45px}.welcome-logo{top:9dvh}}
+
+/* Approved illustrated title screen: the actual buttons overlay artwork exactly. */
+body:has(#welcome:not(.hidden)) main{padding:0!important;margin:0!important;max-width:none!important}
+body:has(#welcome:not(.hidden)) #welcome{padding:0!important;margin:0!important;display:flex!important;align-items:center;justify-content:center;background:#081a20;height:100dvh;width:100vw}
+.title-art-stage{height:min(100dvh,150vw);width:min(100vw,66.6667dvh);aspect-ratio:2/3;position:relative;flex:0 0 auto;overflow:hidden;background:#0b222b}
+.title-art-image{width:100%;height:100%;display:block;object-fit:fill;user-select:none;-webkit-user-drag:none}
+.title-hit{position:absolute!important;display:block!important;min-height:0!important;width:auto!important;height:auto!important;margin:0!important;padding:0!important;opacity:0!important;border:0!important;box-shadow:none!important;background:transparent!important;border-radius:12px!important;touch-action:manipulation;cursor:pointer}
+.title-hit span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.title-hit:focus-visible{opacity:1!important;outline:4px solid #fff5b3!important;outline-offset:-4px}
+.title-new{left:15%;top:65.3%;width:70%!important;height:7.2%!important}
+.title-continue{left:15%;top:73%;width:70%!important;height:7.1%!important}
+.title-learn{left:15%;top:80.5%;width:70%!important;height:7.2%!important}
+.title-settings{left:9.5%;top:88.3%;width:19%!important;height:8.5%!important}
+.title-music{left:29.5%;top:88.3%;width:19%!important;height:8.5%!important}
+.title-achievements{left:49.5%;top:88.3%;width:19%!important;height:8.5%!important}
+.title-credits{left:69.5%;top:88.3%;width:20%!important;height:8.5%!important}
+@media(max-aspect-ratio:2/3){.title-art-stage{height:100dvh;width:66.6667dvh}}
+@media(min-aspect-ratio:2/3){.title-art-stage{width:100vw;height:150vw}}
 </style></head><body><main><header><h1>THE MORMON TRAIL</h1><p>✦ ZION OR BUST! ✦</p></header>
 <div class="soundbar"><button id="globalMusic" type="button">♪ Start Music</button><button id="soundTest" type="button">Test Sound</button><label>Volume <input id="volume" type="range" min="0" max="100" value="85"></label><span id="soundStatus" role="status">Music starts after tapping Play</span></div><section id="welcome" class="welcome-screen" aria-label="The Mormon Trail home screen">
- <div class="welcome-visual" aria-hidden="true"><div class="welcome-logo"><span>THE</span><strong>MORMON TRAIL</strong><em>ZION OR BUST!</em></div></div>
- <div class="welcome-actions">
- <button id="newJourney" class="welcome-primary">🏕️ <span>START NEW JOURNEY</span></button>
- <button id="continueJourney" class="welcome-secondary">🗺️ <span>CONTINUE JOURNEY</span></button>
- <button id="howToPlay" class="welcome-tertiary">📖 <span>HOW TO PLAY</span></button>
- <button id="welcomeMusic" class="welcome-audio" aria-pressed="false">♫ MUSIC OFF</button>
+ <div class="title-art-stage">
+  <img class="title-art-image" src="assets/title-screen.webp" alt="The Mormon Trail: Zion or Bust! Pioneer families travel west with covered wagons and pulled handcarts through a beautiful mountain valley." fetchpriority="high">
+  <button id="newJourney" class="title-hit title-new" aria-label="Start a new journey"><span>Start a New Journey</span></button>
+  <button id="continueJourney" class="title-hit title-continue" aria-label="Continue your saved journey"><span>Continue Your Journey</span></button>
+  <button id="howToPlay" class="title-hit title-learn" aria-label="Learn about the pioneers and trail"><span>Learn About the Pioneers and Trail</span></button>
+  <button id="welcomeSettings" class="title-hit title-settings" aria-label="Settings"><span>Settings</span></button>
+  <button id="welcomeMusic" class="title-hit title-music" aria-label="Toggle music" aria-pressed="false"><span>Music</span></button>
+  <button id="welcomeAchievements" class="title-hit title-achievements" aria-label="Achievements"><span>Achievements</span></button>
+  <button id="welcomeCredits" class="title-hit title-credits" aria-label="Credits"><span>Credits</span></button>
  </div>
- <p class="welcome-credit">An original pioneer adventure · Fan-made historical fiction</p>
 </section>
 <section id="setup" class="panel hidden"><div class="setup-content"><button type="button" id="setupBack" class="setup-back">← Back</button><h2>🌄 Begin your adventure · Nauvoo, 1846</h2><p>Lead your fictional pioneer company to the Salt Lake Valley. Manage food, supplies, health and morale.</p><p><label>Captain's name <input id="captain" maxlength="28" value="Captain Jensen"></label></p><p><label>Difficulty <select id="difficulty"><option value="easy">Sunday Stroll</option><option value="normal" selected>Pioneer Spirit</option><option value="hard">Zion or Bust!</option></select></label></p><p><label>Starting outfit <select id="outfit"><option value="balanced">Balanced — food, tools, and medicine</option><option value="provisions">More food, fewer repairs</option><option value="tools">More tools and medicine, less food</option></select></label></p><p><strong>🎲 Surprise pioneer company!</strong> Your profession, family, wealth and wagon or handcart are assigned randomly. Families unable to afford a wagon travel by handcart.</p><button id="start">Begin Journey →</button><button id="loadStart">Load Saved Journey</button></div></section>
 <section id="store" class="panel hidden"><canvas id="storeArt" width="640" height="260" aria-label="Pixel-art frontier general store with shopkeeper, shelves, and supplies"></canvas><h2>NAUVOO GENERAL STORE</h2><p id="storeSummary"></p><div id="storeItems"></div><p id="storeWeight"></p><button id="depart">Depart for the West →</button><button id="backSetup">← Change Company</button></section><section id="game" class="hidden"><div class="panel" style="display:flex;align-items:center;justify-content:space-between;gap:8px"><span>♪ TRAIL SOUNDTRACK <small id="trackName">Original Frontier Theme</small></span><button id="musicToggle" aria-pressed="false">Music: Off</button></div><canvas id="scene" width="640" height="250" aria-label="Pixel art of a pioneer wagon crossing the plains"></canvas>
@@ -363,7 +383,7 @@ function setMusicCue(cue){
 function updateSoundUI(message){
  const on=musicOn?"On":"Off";
  $("musicToggle").textContent="Music: "+on;$("musicToggle").setAttribute("aria-pressed",String(musicOn));
- $("globalMusic").textContent=musicOn?"♫ Stop Music":"♪ Start Music";if($("welcomeMusic")){$("welcomeMusic").textContent=musicOn?"♫ MUSIC ON":"♫ MUSIC OFF";$("welcomeMusic").setAttribute("aria-pressed",String(musicOn))}
+ $("globalMusic").textContent=musicOn?"♫ Stop Music":"♪ Start Music";if($("welcomeMusic")){$("welcomeMusic").setAttribute("aria-pressed",String(musicOn))}
  $("soundStatus").textContent=message||("Soundtrack "+on+" · "+soundtracks[currentCue].name);
 }
 async function ensureAudio(){
@@ -443,5 +463,8 @@ $("continueJourney").onclick=load;
 $("setupBack").onclick=()=>{$("setup").classList.add("hidden");$("welcome").classList.remove("hidden")};
 $("howToPlay").onclick=()=>{alert("THE MORMON TRAIL\\n\\nYour family, profession and starting wealth are randomized. Buy supplies, then travel west. Balance food, health, pace and morale. Hunt, rest, trade and cross rivers to reach the Salt Lake Valley. Handcart companies face extra challenges. Good luck!")};
 $("welcomeMusic").onclick=toggleMusic;
+$("welcomeSettings").onclick=()=>{const value=prompt("Music volume (0-100)",$("volume").value);if(value!==null&&value.trim()!==""&&!isNaN(Number(value))){$("volume").value=Math.max(0,Math.min(100,Number(value)));$("volume").dispatchEvent(new Event("input"))}};
+$("welcomeAchievements").onclick=()=>alert("Achievements are earned as you survive the trail. More achievements are coming soon!");
+$("welcomeCredits").onclick=()=>alert("The Mormon Trail: Zion or Bust!\\nAn original, fan-made historical adventure. Not affiliated with The Church of Jesus Christ of Latter-day Saints.");
 $("musicToggle").onclick=toggleMusic;$("globalMusic").onclick=toggleMusic;$("soundTest").onclick=testSound;$("volume").oninput=()=>{if(masterGain)masterGain.gain.value=Number($("volume").value)/100};$("start").onclick=start;$("depart").onclick=depart;$("backSetup").onclick=reset;$("save").onclick=save;$("loadStart").onclick=load;$("restart").onclick=reset;
 </script></body></html>

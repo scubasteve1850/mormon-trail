@@ -1,0 +1,11 @@
+# Trail encounters and family personalities
+
+Replaces five generic events with twelve contextual encounters: wheel trouble, wandering oxen, wind/rain damage, a named exhausted traveler, gathering opportunities, helping neighbors, worn boots, an evening story, a passing trader, deep ruts, a friendly camp, and a trail lesson. Recent events have a five-encounter cooldown; weather, transport, living family members, and food affect eligibility. Carpenter, farmer, doctor, merchant, and teacher professions unlock different options. Costs and benefits are shown before selection, and unavailable resource choices are disabled and checked again on resolution.
+
+Unresolved encounters are serialized with a stable subject and decision serial. Loading resumes the same choice without selecting a new encounter. Resolved choices cannot apply twice. Outcomes enter the trail journal and the participating family member’s three most recent memories. Older saves require no reset.
+
+Captain, Eliza, Joseph, Sarah, and Hyrum have distinct fictional voices. Conversations respond to personal health, company health, food shortages, recent decisions, and the final approach to the valley. Players choose whom to speak with; only living family members appear. Listening provides +3 morale once per 25-mile stretch. Additional conversations remain available without repeat bonuses.
+
+A focused phone story layout retains food, health, morale, and vehicle condition while giving dialogue and decision controls more room. Normal Trail restores the full dashboard. Existing portraits, animation, music, history chapters, and route systems are retained. These are fictional family scenes and simplified resource systems, not historical quotations.
+
+Validation: node tests/screens-rivers.test.cjs passes existing river/save/gait/terrain checks, complete reference journeys on Easy/Normal/Hard, and new coverage of all 12 events, five-event cooldown, encounter resume, duplicate resolution, 132 available branch/profession combinations, unavailable supply gates, living-family eligibility, contextual dialogue, saved memories, and bounded conversation rewards. Browser inspection at 355 x 580 confirmed story text and four decision buttons fit; the doctor rest choice consumed one day and 9 lbs of food. Live deployment and native iPhone performance were not verified.

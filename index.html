@@ -283,6 +283,47 @@ function drawMap(){
 }
 let frameId=0,sceneStart=0;
 function startSceneAnimation(){if(frameId)return;sceneStart=performance.now();const loop=now=>{if(!state||$("game").classList.contains("hidden")){frameId=0;return}draw(now);frameId=requestAnimationFrame(loop)};frameId=requestAnimationFrame(loop)}
-function draw(now=0){const c=$("scene"),ctx=c.getContext("2d");ctx.imageSmoothingEnabled=false;let w=320,h=125;ctx.save();ctx.scale(2,2);ctx.fillStyle=state.weather==="Cold"?"#aebcc2":state.weather==="Rainy"?"#637e8e":"#83b7cc";ctx.fillRect(0,0,w,h);ctx.fillStyle="#f8da9a";ctx.fillRect(256,16,22,22);ctx.fillStyle="#758f83";ctx.beginPath();ctx.moveTo(0,86);ctx.lineTo(65,35);ctx.lineTo(118,83);ctx.lineTo(175,24);ctx.lineTo(257,87);ctx.lineTo(320,49);ctx.lineTo(320,125);ctx.lineTo(0,125);ctx.fill();ctx.fillStyle=state.weather==="Cold"?"#c7c6b4":"#9aab78";ctx.fillRect(0,91,320,34);for(let i=0;i<9;i++){let x=((i*57-Math.floor(now/95))%380+380)%380-30;ctx.fillStyle=i%2?"#527349":"#6c8951";ctx.fillRect(x,84+(i%3)*4,5,13);ctx.fillRect(x-3,88+(i%3)*4,11,4)}if(state.weather==="Rainy"||state.weather==="Cold"){ctx.fillStyle=state.weather==="Cold"?"#e7eef0":"#bfd5df";for(let i=0;i<34;i++){let x=(i*47+Math.floor(now/45))%320,y=(i*31+Math.floor(now/25))%105;ctx.fillRect(x,y,state.weather==="Cold"?3:1,state.weather==="Cold"?3:8)}}ctx.fillStyle="#b7a070";ctx.beginPath();ctx.moveTo(0,119);ctx.lineTo(320,100);ctx.lineTo(320,125);ctx.lineTo(0,125);ctx.fill();let x=90+Math.round(Math.sin(now/260)*2);ctx.translate(320,0);ctx.scale(-1,1);ctx.fillStyle="#67452b";ctx.fillRect(x,83,78,14);ctx.fillStyle="#eee0b9";ctx.beginPath();ctx.moveTo(x+6,83);ctx.quadraticCurveTo(x+36,27,x+72,83);ctx.fill();ctx.strokeStyle="#5b4833";ctx.lineWidth=3;ctx.stroke();ctx.fillStyle="#493a2c";[x+18,x+62].forEach(a=>{ctx.beginPath();ctx.arc(a,103,13,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#b99a65";ctx.lineWidth=3;ctx.stroke()});ctx.strokeStyle="#634b34";ctx.beginPath();ctx.moveTo(x+78,91);ctx.lineTo(x+125,92);ctx.stroke();ctx.fillStyle="#74583c";ctx.fillRect(x+122,78,36,20);ctx.fillRect(x+150,73,14,15);ctx.fillStyle="#513c2c";ctx.fillRect(x+128,96,5,17);ctx.fillRect(x+151,96,5,17);ctx.restore()}
+function draw(now=0){
+ if(!state)return;
+ const c=$("scene"),ctx=c.getContext("2d"),w=c.width,hh=c.height;
+ ctx.clearRect(0,0,w,hh);
+ const rainy=state.weather==="Rainy",cold=state.weather==="Cold";
+ const sky=ctx.createLinearGradient(0,0,0,hh);sky.addColorStop(0,rainy?"#526b86":cold?"#96bdd0":"#59b8e6");sky.addColorStop(.75,rainy?"#9fb4b8":"#e8d3a0");sky.addColorStop(1,"#e4bf7c");ctx.fillStyle=sky;ctx.fillRect(0,0,w,hh);
+ ctx.fillStyle="#ffe9b0";ctx.beginPath();ctx.arc(510,55,26,0,Math.PI*2);ctx.fill();
+ for(let layer=0;layer<3;layer++){
+  ctx.fillStyle=["#a5bcc0","#719b9b","#4e8473"][layer];ctx.beginPath();
+  ctx.moveTo(0,205);
+  for(let x=0;x<=w+30;x+=18){const y=100+layer*29+Math.sin(x*.014+layer)*23+Math.sin(x*.032+layer*2)*12;ctx.lineTo(x,y)}
+  ctx.lineTo(w,205);ctx.closePath();ctx.fill();
+ }
+ ctx.fillStyle="#77a263";ctx.fillRect(0,184,w,66);
+ ctx.fillStyle="#b99b68";ctx.beginPath();ctx.moveTo(0,218);ctx.quadraticCurveTo(300,196,w,218);ctx.lineTo(w,250);ctx.lineTo(0,250);ctx.fill();
+ const speed=now*.028;
+ for(let i=0;i<15;i++){
+  const x=((i*89+speed*(i%3+1))%(w+110))-55,y=174+(i%4)*11;
+  ctx.fillStyle=i%3?"#3d7650":"#477b4c";
+  ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+9,y-27-(i%3)*7);ctx.lineTo(x+18,y);ctx.fill();
+  ctx.fillStyle="#76583b";ctx.fillRect(x+8,y,3,9);
+ }
+ ctx.save();ctx.translate(440+Math.sin(now/300)*3,172);ctx.scale(-1,1);
+ const cart=state.transport==="handcart";
+ if(cart){
+  ctx.strokeStyle="#75482f";ctx.lineWidth=6;ctx.beginPath();ctx.moveTo(0,25);ctx.lineTo(85,25);ctx.lineTo(104,10);ctx.moveTo(20,25);ctx.lineTo(27,-8);ctx.lineTo(76,-8);ctx.lineTo(85,25);ctx.stroke();
+  ctx.fillStyle="#c4a172";ctx.fillRect(27,-14,50,26);ctx.fillStyle="#f0e0b7";ctx.fillRect(33,-11,39,14);
+  ctx.fillStyle="#443b34";for(let x of [22,78]){ctx.beginPath();ctx.arc(x,30,13,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#caa76b";ctx.lineWidth=3;ctx.stroke()}
+  ctx.fillStyle="#bd8060";ctx.beginPath();ctx.arc(119,-3,11,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle="#584b43";ctx.lineWidth=9;ctx.beginPath();ctx.moveTo(118,9);ctx.lineTo(113,33);ctx.moveTo(113,33);ctx.lineTo(104,49);ctx.moveTo(113,33);ctx.lineTo(127,48);ctx.moveTo(118,13);ctx.lineTo(96,18);ctx.stroke();
+ }else{
+  ctx.fillStyle="#e9d9b6";ctx.beginPath();ctx.moveTo(5,13);ctx.bezierCurveTo(0,-82,120,-84,126,13);ctx.closePath();ctx.fill();
+  ctx.strokeStyle="#8d765b";ctx.lineWidth=4;ctx.stroke();
+  ctx.fillStyle="#95643b";ctx.fillRect(0,8,131,35);ctx.fillStyle="#bd8751";ctx.fillRect(8,14,110,10);
+  for(let x of [24,102]){ctx.fillStyle="#4b362b";ctx.beginPath();ctx.arc(x,43,20,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#cda96d";ctx.lineWidth=5;ctx.stroke()}
+  ctx.strokeStyle="#735238";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(128,28);ctx.lineTo(193,29);ctx.stroke();
+  ctx.fillStyle="#a98b65";ctx.fillRect(187,4,51,28);ctx.fillStyle="#77563d";ctx.fillRect(192,28,6,25);ctx.fillRect(222,28,6,25);
+ }
+ ctx.restore();
+ if(rainy||cold){ctx.fillStyle=cold?"#f8ffff":"#b7d5e8";for(let i=0;i<48;i++){let x=(i*71+now/(cold?32:11))%w,y=(i*43+now/(cold?60:17))%hh;ctx.fillRect(x,y,cold?3:2,cold?3:13)}}
+ const shade=ctx.createLinearGradient(0,0,0,hh);shade.addColorStop(0,"#0d283300");shade.addColorStop(1,"#0d283355");ctx.fillStyle=shade;ctx.fillRect(0,0,w,hh);
+}
 function setTab(tab){for(const t of ["travel","supplies","map","journal"]){$(t+"Panel").classList.toggle("hidden",t!==tab)}document.querySelectorAll("#gameTabs button").forEach(b=>{b.classList.toggle("selected",b.dataset.tab===tab);b.setAttribute("aria-pressed",String(b.dataset.tab===tab))})}document.querySelectorAll("#gameTabs button").forEach(b=>b.onclick=()=>setTab(b.dataset.tab));$("musicToggle").onclick=toggleMusic;$("globalMusic").onclick=toggleMusic;$("soundTest").onclick=testSound;$("volume").oninput=()=>{if(masterGain)masterGain.gain.value=Number($("volume").value)/100};$("start").onclick=start;$("depart").onclick=depart;$("backSetup").onclick=reset;$("save").onclick=save;$("loadStart").onclick=load;$("restart").onclick=reset;
 </script></body></html>

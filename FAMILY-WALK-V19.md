@@ -6,7 +6,8 @@ Review and iteration:
 1. Generated and inspected all five modular atlases. Located the alpha bounds and shoulder/elbow/knee/ankle pivots; integrated the textured body and limbs.
 2. Corrected the ground line, smoothed foot position and velocity through toe-off/heel-strike, and added a shared pelvis reach constraint. Boots roll separately from the shin. Idle blends to a neutral planted stance rather than holding a walking pose.
 3. Close-up cycle review exposed the remaining tiny-step/fast-cadence shuffle. Increased road travel to 36 scene units/second and reduced human gait frequency to 5.4 radians/second; stride length is derived from those values. Oxen cadence and stride were synchronized to the same ground speed. Scene rendering targets the browser's 60 Hz frame opportunities, while reduced motion remains static/slow-refresh.
-4. Inspected winter/summer family scenes, idle camp and twelve cycle phases, including close-up joint connections. Existing scene composition remains westward/right-to-left. The textured renderer is shared by trail, river, camp and arrival scenes.
+4. Live browser review confirmed the new artwork and exposed frame stalls from per-limb filtering of large atlases. Added load-time cropped/resized caches and pre-shaded far limbs; animation frames reuse small canvas textures and perform no brightness filtering. Cache body textures are 320 pixels high and limb textures 192 pixels high, sufficient for their scene display sizes.
+5. Inspected winter/summer family scenes, idle camp and twelve cycle phases, including close-up joint connections. Existing scene composition remains westward/right-to-left. The textured renderer is shared by trail, river, camp and arrival scenes.
 
 The dress mesh narrows the working skirt below the waist and adds subtle fabric sway. Foreground/background limbs overlap at the source pivots; darker far limbs provide depth. Existing canvas artwork is retained as a loading/error fallback. New atlases preload at startup with versioned filenames.
 
@@ -25,3 +26,5 @@ Validation:
 - Native canvas renders were reviewed with actual repository images. Actual iPhone hardware frame rate is not established by these checks.
 
 The update preserves winter camp economics, death/grave notifications, history/map behavior, music, saved gameplay state and mandatory river presentation.
+
+Also corrected the shop recommendation label to match its existing 375-lb and one-clothing-bundle-per-traveler packing targets.

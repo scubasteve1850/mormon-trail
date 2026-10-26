@@ -284,6 +284,10 @@ body:has(#storyIntro:not(.hidden)) header,body:has(#storyIntro:not(.hidden)) .so
 .shop-quantity button{min-width:28px!important;min-height:27px!important;padding:1px 8px!important}
 .shop-quantity span{font-weight:800;color:#382b1d;min-width:15px;text-align:center}
 @media(max-width:600px){.shop-item{min-height:84px}.shop-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.shop-actions button{font-size:.71rem!important;padding:3px 7px!important}.shop-quantity{gap:4px}#storeSummary{font-size:.78rem;line-height:1.25;margin:3px 0 5px}#store h2{font-size:1.1rem;margin:5px 0}#storePhoto{height:clamp(120px,20dvh,200px)}#storeGreeting{font-size:.74rem}}
+
+#storeItems{scrollbar-width:thin;scrollbar-color:#b48645 #fff1d4}
+.shop-actions button{white-space:nowrap}
+@media(max-width:600px){.shop-actions button{font-size:.67rem!important;padding:3px 5px!important}}
 </style></head><body><main><header><h1>THE MORMON TRAIL</h1><p>✦ ZION OR BUST! ✦</p></header>
 <div class="soundbar"><button id="globalMusic" type="button">♪ Start Music</button><button id="soundTest" type="button">Test Sound</button><label>Volume <input id="volume" type="range" min="0" max="100" value="85"></label><span id="soundStatus" role="status">Music starts after tapping Play</span></div><section id="welcome" class="welcome-screen" aria-label="The Mormon Trail home screen">
  <div class="title-art-stage">
@@ -443,12 +447,12 @@ function shopView(){
   const minus=document.createElement("button");minus.textContent="−";minus.setAttribute("aria-label","Decrease "+g[1]+" quantity");
   const count=document.createElement("span");const plus=document.createElement("button");plus.textContent="+";plus.setAttribute("aria-label","Increase "+g[1]+" quantity");
   let qty=shopQuantities[key]||1;
-  const updateQuantity=()=>{count.textContent=String(qty);minus.disabled=qty<=1;shopQuantities[key]=qty};
+  const updateQuantity=()=>{count.textContent=String(qty);minus.disabled=qty<=1;shopQuantities[key]=qty;if(typeof buy!=="undefined")buy.textContent="Buy $"+(price*qty)};
   minus.onclick=()=>{qty=Math.max(1,qty-1);updateQuantity()};
   plus.onclick=()=>{qty=Math.min(99,qty+1);updateQuantity()};
   updateQuantity();quantity.append(minus,count,plus);
   const buy=document.createElement("button");buy.textContent="Buy";buy.setAttribute("aria-label","Buy selected quantity of "+g[1]);
-  buy.disabled=(state.cash<price)||(weight()+mass>capacity())||(key==="oxen"&&state.transport==="handcart");
+  buy.textContent="Buy $"+(price*qty);buy.disabled=(state.cash<price)||(weight()+mass>capacity())||(key==="oxen"&&state.transport==="handcart");
   buy.onclick=()=>{
    const total=price*qty,extra=mass*qty;
    if(state.cash<total||weight()+extra>capacity()||(key==="oxen"&&state.transport==="handcart")){alert("Not enough money or cargo space for "+qty+" "+g[1]+".");return}
@@ -496,7 +500,26 @@ let storyPage=0;
 function showStory(){storyPage=0;$("store").classList.add("hidden");$("storyIntro").classList.remove("hidden");renderStory()}
 function renderStory(){const page=storyPages[storyPage];const scenes=["farewell-nauvoo","driven-from-home","temple-left-behind","journey-begins"];$("storyIntro").style.setProperty("--story-art",`url("assets/${scenes[storyPage]}.webp")`);$("storyIntro").querySelector(".story-intro-top>span").textContent="CHAPTER "+String(storyPage+1).padStart(2,"0");$("storyHeading").textContent=page.title;$("storyText").textContent=page.text;$("storyCount").textContent=(storyPage+1)+" OF "+storyPages.length;$("storyProgress").textContent=storyPages.map((_,i)=>i===storyPage?"◆":"◇").join("  ");$("storyNext").textContent=storyPage===storyPages.length-1?"VISIT THE GENERAL STORE ➜":"CONTINUE THE STORY ➜"}
 function finishStory(){$("storyIntro").classList.add("hidden");$("store").classList.remove("hidden");shopView()}
-function depart(){if(state.food<50){alert("You need at least 50 lbs of food to depart.");return}if(state.transport==="wagon"&&state.oxen<2){alert("A wagon needs at least two oxen.");return}$("store").classList.add("hidden");log("Purchased provisions and departed Nauvoo.");controls()}
+function departureWarnings(){
+ const people=state.company.length||5,alerts=[];
+ if(state.food<150)alerts.push("Food is running low for "+people+" travelers. More provisions could help your family on the trail.");
+ if(state.medicine<1)alerts.push("You have no medicine kit. Illness and injuries may be harder to manage.");
+ if(state.clothing<1)alerts.push("You have no spare warm clothing. Cold weather may become dangerous.");
+ if(state.parts<1&&state.transport==="wagon")alerts.push("You have no repair kit. A broken wagon could leave you stranded.");
+ if(state.ammo<20)alerts.push("You have little ammunition for hunting.");
+ if(state.cash<25)alerts.push("You have very little money left for trading along the way.");
+ return alerts;
+}
+function depart(){
+ if(state.food<50){alert("You need at least 50 lbs of food to depart.");return}
+ if(state.transport==="wagon"&&state.oxen<2){alert("A wagon needs at least two oxen.");return}
+ const warnings=departureWarnings();
+ if(warnings.length){
+  const proceed=confirm("THE SHOPKEEPER'S PARTING ADVICE\n\n"+warnings.map((w,i)=>(i+1)+". "+w).join("\n\n")+"\n\nThe road west is uncertain. Would you like to depart anyway?\n\nOK = Depart west   •   Cancel = Return to shop");
+  if(!proceed)return;
+ }
+ $("store").classList.add("hidden");log("Purchased provisions and departed Nauvoo.");controls()
+}
 function reset(){$("storyIntro").classList.add("hidden");state=null;$("game").classList.add("hidden");$("store").classList.add("hidden");$("setup").classList.add("hidden");$("welcome").classList.remove("hidden")}
 function save(){if(!state)return;try{localStorage.setItem(SAVE,JSON.stringify(state));log("Journey saved to this browser.");render()}catch(e){alert("Saving unavailable in this browser.")}}
 function load(){try{let s=JSON.parse(localStorage.getItem(SAVE));if(!s||!Array.isArray(s.journal)||typeof s.miles!=="number")throw Error();state=s;normalizeCompany();log("Resumed saved journey.");controls()}catch(e){alert("No valid saved journey was found.")}}

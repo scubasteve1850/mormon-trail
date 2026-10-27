@@ -1,0 +1,11 @@
+const fs=require('node:fs'),assert=require('node:assert/strict'),path=require('node:path'),vm=require('node:vm');
+const html=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');const script=html.match(/<script>([\s\S]*?)<\/script>/)?.[1];assert.ok(script);new vm.Script(script);
+assert.match(script,/continuousOwner=owner;motionUntil=Number\.POSITIVE_INFINITY;/,'GO enables continuous animation');
+assert.match(script,/continuousOwner=null;motionUntil=0;visualSpeed=0;/,'STOP clears travel animation');
+assert.match(script,/continuousOwner===state\|\|now<motionUntil/,'Animation follows live travel state');
+assert.match(script,/🟢 GO · Resume traveling/,'Camp resumes travel');
+assert.match(script,/🟢 GO · Start hunt/,'Hunting starts explicitly');
+assert.match(script,/🛑 STOP · Pause hunt/,'Hunting pauses explicitly');
+assert.match(script,/🏕 Finish fishing & return/,'Fishing return action labeled');
+assert.match(script,/🏕 Finish & return to camp/,'Hunting return action labeled');
+console.log('Version 107 Go/Stop and activity control checks passed');

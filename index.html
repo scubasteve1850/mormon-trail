@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>The Mormon Trail: Zion or Bust!</title><meta name="mormon-trail-build" content="trail-playlist-28">
+<title>The Mormon Trail: Zion or Bust!</title><meta name="mormon-trail-build" content="trail-rag-29">
 <style>
 :root{font-family:"Courier New",monospace;color:#f2dfae;background:#181c18}*{box-sizing:border-box}body{margin:0;padding:20px}main{max-width:1000px;margin:auto}h1{text-align:center;color:#f4c66d;text-shadow:3px 3px #65462d;margin-bottom:4px}header p{text-align:center;margin-top:0;color:#c1bb9e}.panel{background:#252b22;border:3px solid #977b4a;box-shadow:5px 5px #111;padding:15px;margin:15px 0}button,select,input{font:inherit}button{background:#433b29;color:#ffe1a1;border:2px solid #c59e58;padding:10px;cursor:pointer;margin:3px}button:hover,button:focus{background:#695234}button:disabled{opacity:.35;cursor:default}input,select{background:#131a17;color:#fff0c7;border:1px solid #ab956d;padding:8px;max-width:100%}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.stat{background:#171d17;padding:10px;text-align:center}.stat strong{display:block;color:#ffdb88;font-size:1.15em}#scene{width:100%;height:auto;image-rendering:pixelated;border:3px solid #a78b5a;background:#80abc0}#log{max-height:210px;overflow:auto;line-height:1.6}#log p{border-bottom:1px dotted #665a43;padding-bottom:6px}#actions{display:flex;flex-wrap:wrap}small{color:#c2baa0}.hidden{display:none!important}#map{font-size:.85rem;color:#e6d3a5;line-height:1.6}@media(max-width:600px){body{padding:8px}.grid{grid-template-columns:repeat(2,1fr)}button{flex:1 1 42%}h1{font-size:1.6rem}#actions button{flex:1 1 42%}}
 #trailMap{width:100%;height:auto;image-rendering:pixelated;background:#d7bf88;border:2px solid #8c6e42}#mapLegend{font-size:.8rem;line-height:1.5}#actions{gap:6px}#actions button{min-height:44px}#game{overflow:hidden}#scene{max-height:350px}#storeItems button{min-width:75px}@media(max-width:600px){.panel{padding:12px;margin:10px 0}h2{font-size:1.25rem}#actions button{font-size:.9rem}#mapLegend{font-size:.7rem}} body{background:#121513;color:#f3e4b8;font-size:16px;padding:12px}main{max-width:850px}header{background:#111b1b;border:5px ridge #b19a63;padding:14px 8px;margin-bottom:10px}header h1{font-size:clamp(1.65rem,5vw,2.7rem);letter-spacing:.09em;color:#f6cf73;text-shadow:3px 3px #59391f}header p{font-size:.9rem;letter-spacing:.05em}.panel{background:#181f1d;border:4px ridge #b59a64;box-shadow:4px 4px #080a09;margin:10px 0;padding:15px}.panel h2{color:#f1c66c;text-transform:uppercase;letter-spacing:.04em}button{background:#15252a;color:#f5dca3;border:3px outset #b59b65;box-shadow:2px 2px #070a09;font-weight:bold;border-radius:0;min-height:43px}button:active{border-style:inset}input,select{border:2px inset #b39a69;background:#0c191c;border-radius:0}#scene{border:5px ridge #c2a675;background:#85b3c8;display:block}#stats{border:3px ridge #a68c5b;padding:6px;background:#101b1d}.stat{background:#1a2828;border:1px solid #4b625f}.stat strong{color:#f7c56a}.soundbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;background:#111d1e;border:3px ridge #a58c61;padding:8px;margin-bottom:10px}.soundbar label{display:flex;align-items:center;gap:6px}.soundbar input{width:85px;accent-color:#d6b169}.soundbar #soundStatus{font-size:.76rem;color:#d3c49c;flex:1 1 180px}#game>.panel:first-child{padding:8px;background:#172727}#actions button{flex:1 1 44%;text-align:center}summary{cursor:pointer;color:#f5d081}@media(max-width:600px){body{padding:6px}.panel{padding:10px}header{padding:10px 5px}header p{font-size:.75rem}#actions button{font-size:.88rem}} @media(max-width:700px){
@@ -910,12 +910,11 @@ function save(){if(!state)return;try{localStorage.setItem(SAVE,JSON.stringify(st
 function load(){try{let s=JSON.parse(localStorage.getItem(SAVE));if(!s||!Array.isArray(s.journal)||typeof s.miles!=="number")throw Error();state=s;normalizeCompany();log("Resumed saved journey.");controls()}catch(e){alert("No valid saved journey was found.")}}
 let audioCtx=null,musicOn=false,musicTimer=null,noteIndex=0,currentCue="title",masterGain=null;
 // Recorded soundtrack files are loaded when present; synthesized cues remain as fallback.
-const recordedTracks={title:"assets/audio/frontier-piano-rag-encore.mp3",travel:"https://media2.ldscdn.org/assets/music/childrens-songbook/2002-01-1840-pioneer-children-sang-as-they-walked-music-only-192k-eng.mp3"};
-const trailPlaylist=[
- {name:'Pioneer Children Sang as They Walked',url:recordedTracks.travel,rate:1.12},
- {name:'Come, Come, Ye Saints',url:'https://binary-lookup.churchofjesuschrist.org/v1/assets/da7b733762af4ef874b7a25c250a085c3f0df7d6/default/default.mp3',rate:1.12}
-];
-let trailTrackIndex=0,recordedAudio=null,recordedCue=null;
+const recordedTracks={
+ title:{name:'Come, Come, Ye Saints',url:'https://binary-lookup.churchofjesuschrist.org/v1/assets/da7b733762af4ef874b7a25c250a085c3f0df7d6/default/default.mp3',rate:1.2},
+ travel:{name:'Frontier Piano Rag',url:'assets/audio/frontier-piano-rag-encore.mp3',rate:1.12}
+};
+let recordedAudio=null,recordedCue=null;
 function recordedTrackFor(cue){return cue==="title"||cue==="story"||cue==="store"?"title":cue==="travel"||cue==="handcart"?"travel":null}
 function stopRecorded(){if(recordedAudio){recordedAudio.pause();recordedAudio=null;recordedCue=null}}
 function startRecorded(){
@@ -923,9 +922,9 @@ function startRecorded(){
  if(!musicOn||!key){stopRecorded();return false}
  if(recordedAudio&&recordedCue===key){recordedAudio.volume=Number($("volume").value)/100;return true}
  stopRecorded();
- const track=key==='travel'?trailPlaylist[trailTrackIndex]:null;
- const audio=new Audio(track?track.url:recordedTracks[key]);audio.loop=key!=='travel';audio.preload="auto";
- if(track){audio.playbackRate=track.rate;const label=$("trackName");if(label)label.textContent=track.name;audio.addEventListener("ended",()=>{if(recordedAudio!==audio||!musicOn||recordedTrackFor(currentCue)!=='travel')return;trailTrackIndex=(trailTrackIndex+1)%trailPlaylist.length;stopRecorded();startRecorded();updateSoundUI()})}
+ const track=recordedTracks[key];
+ const audio=new Audio(track.url);audio.loop=true;audio.preload="auto";audio.playbackRate=track.rate;
+ const label=$("trackName");if(label)label.textContent=track.name;
  audio.volume=Number($("volume").value)/100;
  audio.addEventListener("error",()=>{if(recordedAudio!==audio)return;stopRecorded();if(musicOn){musicTick();musicTimer=setInterval(musicTick,soundtracks[currentCue].tempo)}},{once:true});
  recordedAudio=audio;recordedCue=key;
@@ -941,8 +940,8 @@ const soundtracks={
  title:{name:"Come, Come, Ye Saints · Western Fiddle",tempo:235,notes:[60,60,62,64,60,59,60,62,64,65,64,60,62,60,59,60,60,60,62,64,60,59,60,62,64,65,64,60,62,60,59,60,64,65,67,67,67,65,64,65,64,65,65,65,64,62,64,64,67,65,64,62,62,62,55,60,59,60,62,64,65,67,64,60,62,60,59,60],durations:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1.5,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1.5,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1.5,2,1,1,1,1,1,1,1,1,1,1,1,1,1.5,2],chords:[[48,52,55],[55,59,62],[53,57,60],[48,52,55]],lead:"fiddle"},
  story:{name:"Farewell to Nauvoo · Hymn-Inspired",tempo:420,notes:[67,69,72,71,69,67,64,null,65,67,69,72,71,69,67,null],chords:[[48,52,55],[45,48,52],[53,57,60],[55,59,62]],lead:"flute"},
  store:{name:"The Nauvoo Mercantile · Folk Dance",tempo:240,notes:[67,72,76,72,69,72,76,72,67,71,74,71,65,69,72,null],chords:[[48,52,55],[53,57,60],[55,59,62],[48,52,55]],lead:"pluck"},
- travel:{name:"Pioneer Children Sang as They Walked",tempo:245,notes:[64,67,69,72,71,69,67,64,62,64,67,69,67,64,62,60],chords:[[48,52,55],[53,57,60],[55,59,62],[48,52,55]],lead:"horn"},
- handcart:{name:"Pioneer Children Sang as They Walked",tempo:270,notes:[67,69,72,74,72,69,67,64,67,69,72,76,74,72,69,67],chords:[[48,52,55],[53,57,60],[48,52,55],[55,59,62]],lead:"strings"},
+ travel:{name:"Frontier Piano Rag",tempo:245,notes:[64,67,69,72,71,69,67,64,62,64,67,69,67,64,62,60],chords:[[48,52,55],[53,57,60],[55,59,62],[48,52,55]],lead:"horn"},
+ handcart:{name:"Frontier Piano Rag",tempo:270,notes:[67,69,72,74,72,69,67,64,67,69,72,76,74,72,69,67],chords:[[48,52,55],[53,57,60],[48,52,55],[55,59,62]],lead:"strings"},
  camp:{name:"Evening Campfire · Reverie",tempo:390,notes:[60,64,67,64,62,65,69,65,64,67,72,67,62,64,60,null],chords:[[48,52,55],[53,57,60],[45,48,52],[55,59,62]],lead:"flute"},
  hunt:{name:"Prairie Chase · Adventure",tempo:170,notes:[72,72,67,69,72,74,76,74,72,69,67,69,72,67,64,67],chords:[[48,52,55],[55,59,62],[53,57,60],[55,59,62]],lead:"strings"},
  river:{name:"River Crossing · Suspense",tempo:280,notes:[62,65,69,68,62,65,70,69,65,64,62,null,58,62,65,null],chords:[[50,53,57],[46,50,53],[48,52,55],[50,53,57]],lead:"horn"},
@@ -1002,7 +1001,7 @@ function updateSoundUI(message){
  $("musicToggle").textContent="♫";$("musicToggle").setAttribute("aria-pressed",String(musicOn));$("musicToggle").setAttribute("aria-label",musicOn?"Turn music off":"Turn music on");$("musicToggle").setAttribute("title",musicOn?"Music on · tap to turn off":"Music off · tap to turn on");
  $("globalMusic").textContent=musicOn?"♫ Stop Music":"♪ Start Music";
  if($("welcomeMusic"))$("welcomeMusic").setAttribute("aria-pressed",String(musicOn));
- $("soundStatus").textContent=message||("Soundtrack "+on+" · "+(recordedCue==="travel"?trailPlaylist[trailTrackIndex].name:soundtracks[currentCue].name));
+ $("soundStatus").textContent=message||("Soundtrack "+on+" · "+(recordedCue?recordedTracks[recordedCue].name:soundtracks[currentCue].name));
 }
 async function ensureAudio(){
  const C=window.AudioContext||window.webkitAudioContext;

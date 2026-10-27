@@ -994,7 +994,7 @@ function start(){
   ['Sarah','Clara','Jane','Louisa','Emily','Alice','Ruth','Esther','Nancy','Margaret','Julia','Lydia'],
   ['Hyrum','Brigham','David','Oliver','George','Nathaniel','Ephraim','Levi','Caleb','Peter','Andrew','Albert']
  ];
- const usedFamilyNames=new Set([($("captain").value.trim()||"Captain Jensen").trim().split(/\\s+/).at(-1).toLowerCase()]);
+ const usedFamilyNames=new Set([($("captain").value.trim()||"Captain Jensen").trim().split(/\s+/).at(-1).toLowerCase()]);
  const companions=familyNamePools.map(pool=>{const available=pool.filter(name=>!usedFamilyNames.has(name.toLowerCase()));const name=available[Math.floor(Math.random()*available.length)]||pool[0];usedFamilyNames.add(name.toLowerCase());return name;});
  const shuffled=familyTalents.slice();for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]]}if(shuffled[0].hunt||shuffled[0].gather||shuffled[0].carry){const j=shuffled.findIndex(t=>t.pace||t.food||t.repair);[shuffled[0],shuffled[j]]=[shuffled[j],shuffled[0]]}
  const family=Array.from({length:5},(_,i)=>({name:i===0?($("captain").value.trim()||"Captain Jensen"):companions[i-1],health:100,alive:true,talent:shuffled[i].id}));

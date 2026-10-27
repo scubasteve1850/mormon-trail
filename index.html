@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
-<title>The Mormon Trail: Zion or Bust!</title><meta name="mormon-trail-build" content="trail-journey-43">
+<title>The Mormon Trail: Zion or Bust!</title><meta name="mormon-trail-build" content="trail-sound-status-44">
 <style>
 :root{font-family:"Courier New",monospace;color:#f2dfae;background:#181c18}*{box-sizing:border-box}body{margin:0;padding:20px}main{max-width:1000px;margin:auto}h1{text-align:center;color:#f4c66d;text-shadow:3px 3px #65462d;margin-bottom:4px}header p{text-align:center;margin-top:0;color:#c1bb9e}.panel{background:#252b22;border:3px solid #977b4a;box-shadow:5px 5px #111;padding:15px;margin:15px 0}button,select,input{font:inherit}button{background:#433b29;color:#ffe1a1;border:2px solid #c59e58;padding:10px;cursor:pointer;margin:3px}button:hover,button:focus{background:#695234}button:disabled{opacity:.35;cursor:default}input,select{background:#131a17;color:#fff0c7;border:1px solid #ab956d;padding:8px;max-width:100%}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.stat{background:#171d17;padding:10px;text-align:center}.stat strong{display:block;color:#ffdb88;font-size:1.15em}#scene{width:100%;height:auto;image-rendering:pixelated;border:3px solid #a78b5a;background:#80abc0}#log{max-height:210px;overflow:auto;line-height:1.6}#log p{border-bottom:1px dotted #665a43;padding-bottom:6px}#actions{display:flex;flex-wrap:wrap}small{color:#c2baa0}.hidden{display:none!important}#map{font-size:.85rem;color:#e6d3a5;line-height:1.6}@media(max-width:600px){body{padding:8px}.grid{grid-template-columns:repeat(2,1fr)}button{flex:1 1 42%}h1{font-size:1.6rem}#actions button{flex:1 1 42%}}
 #trailMap{width:100%;height:auto;image-rendering:pixelated;background:#d7bf88;border:2px solid #8c6e42}#mapLegend{font-size:.8rem;line-height:1.5}#actions{gap:6px}#actions button{min-height:44px}#game{overflow:hidden}#scene{max-height:350px}#storeItems button{min-width:75px}@media(max-width:600px){.panel{padding:12px;margin:10px 0}h2{font-size:1.25rem}#actions button{font-size:.9rem}#mapLegend{font-size:.7rem}} body{background:#121513;color:#f3e4b8;font-size:16px;padding:12px}main{max-width:850px}header{background:#111b1b;border:5px ridge #b19a63;padding:14px 8px;margin-bottom:10px}header h1{font-size:clamp(1.65rem,5vw,2.7rem);letter-spacing:.09em;color:#f6cf73;text-shadow:3px 3px #59391f}header p{font-size:.9rem;letter-spacing:.05em}.panel{background:#181f1d;border:4px ridge #b59a64;box-shadow:4px 4px #080a09;margin:10px 0;padding:15px}.panel h2{color:#f1c66c;text-transform:uppercase;letter-spacing:.04em}button{background:#15252a;color:#f5dca3;border:3px outset #b59b65;box-shadow:2px 2px #070a09;font-weight:bold;border-radius:0;min-height:43px}button:active{border-style:inset}input,select{border:2px inset #b39a69;background:#0c191c;border-radius:0}#scene{border:5px ridge #c2a675;background:#85b3c8;display:block}#stats{border:3px ridge #a68c5b;padding:6px;background:#101b1d}.stat{background:#1a2828;border:1px solid #4b625f}.stat strong{color:#f7c56a}.soundbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;background:#111d1e;border:3px ridge #a58c61;padding:8px;margin-bottom:10px}.soundbar label{display:flex;align-items:center;gap:6px}.soundbar input{width:85px;accent-color:#d6b169}.soundbar #soundStatus{font-size:.76rem;color:#d3c49c;flex:1 1 180px}#game>.panel:first-child{padding:8px;background:#172727}#actions button{flex:1 1 44%;text-align:center}summary{cursor:pointer;color:#f5d081}@media(max-width:600px){body{padding:6px}.panel{padding:10px}header{padding:10px 5px}header p{font-size:.75rem}#actions button{font-size:.88rem}} @media(max-width:700px){
@@ -1026,8 +1026,8 @@ function percussion(start,kind,volume=.012){
 let lastStormSound=-10000;
 function playTrailSound(kind){ensureAudio().then(()=>{if(!audioCtx||!masterGain||typeof audioCtx.createBuffer!=='function')return;try{const seconds=kind==='gunshot'?.5:kind==='splash'?.65:2,rate=audioCtx.sampleRate,buffer=audioCtx.createBuffer(1,Math.floor(rate*seconds),rate),data=buffer.getChannelData(0);for(let i=0;i<data.length;i++){const t=i/rate,env=kind==='rain'?.18:Math.exp(-t*(kind==='gunshot'?12:5));data[i]=(Math.random()*2-1)*env}const source=audioCtx.createBufferSource(),filter=audioCtx.createBiquadFilter(),gain=audioCtx.createGain();source.buffer=buffer;filter.type=kind==='gunshot'?'lowpass':'bandpass';filter.frequency.value=kind==='gunshot'?700:kind==='splash'?1100:2200;gain.gain.value=kind==='gunshot'?.45:kind==='splash'?.16:.08;source.connect(filter).connect(gain).connect(masterGain);source.start();source.stop(audioCtx.currentTime+seconds);if(kind==='rain'&&Math.random()<.35)percussion(audioCtx.currentTime+.4,'drum',.025)}catch(e){} }).catch(()=>{})}
 let nightTimer=null,nightToken=0,nightCount=0;
-function stopNightAmbient(){nightToken++;if(nightTimer)clearInterval(nightTimer);nightTimer=null}
-function startNightAmbient(){stopNightAmbient();const token=nightToken;ensureAudio().then(()=>{if(token!==nightToken||currentCue!=='camp')return;nightCount=0;nightTick();nightTimer=setInterval(nightTick,4000)}).catch(()=>{})}
+function stopNightAmbient(){nightToken++;const wasPlaying=!!nightTimer;if(nightTimer)clearInterval(nightTimer);nightTimer=null;if(wasPlaying&&currentCue==='camp')updateSoundUI()}
+function startNightAmbient(){stopNightAmbient();const token=nightToken;ensureAudio().then(()=>{if(token!==nightToken||currentCue!=='camp')return;nightCount=0;nightTick();nightTimer=setInterval(nightTick,4000);updateSoundUI()}).catch(()=>{if(token===nightToken&&currentCue==='camp')updateSoundUI('Night sounds unavailable on this device.')})}
 function nightTick(){if(document.hidden||!audioCtx||!masterGain)return;try{const now=audioCtx.currentTime,owl=nightCount++%3===2;for(let i=0;i<(owl?2:4);i++){const osc=audioCtx.createOscillator(),gain=audioCtx.createGain(),t=now+i*(owl?.35:.12);osc.type='sine';osc.frequency.value=owl?(i?440:520):3800;gain.gain.setValueAtTime(0,t);gain.gain.linearRampToValueAtTime(owl?.035:.014,t+.025);gain.gain.exponentialRampToValueAtTime(.0001,t+(owl?.3:.08));osc.connect(gain).connect(masterGain);osc.start(t);osc.stop(t+(owl?.32:.09))}}catch(e){}}
 function weatherSound(){const now=performance.now();if(now-lastStormSound>5000){lastStormSound=now;playTrailSound('rain')}}
 function musicTick(){
@@ -1050,7 +1050,7 @@ function setMusicCue(cue){
  if(cue!=='camp')stopNightAmbient();
  if(currentCue===cue)return;
  currentCue=cue;noteIndex=0;
- const label=$("trackName");if(label)label.textContent=soundtracks[cue].name;
+ const label=$("trackName");if(label)label.textContent=cue==='camp'?'Camp ambience':soundtracks[cue].name;
  if(musicTimer){clearInterval(musicTimer);musicTimer=null}
  if(musicOn&&!startRecorded()&&cue!=='camp'){musicTick();musicTimer=setInterval(musicTick,soundtracks[cue].tempo)}
  updateSoundUI();
@@ -1060,7 +1060,7 @@ function updateSoundUI(message){
  $("musicToggle").textContent="♫";$("musicToggle").setAttribute("aria-pressed",String(musicOn));$("musicToggle").setAttribute("aria-label",musicOn?"Turn music off":"Turn music on");$("musicToggle").setAttribute("title",musicOn?"Music on · tap to turn off":"Music off · tap to turn on");
  $("globalMusic").textContent=musicOn?"♫ Stop Music":"♪ Start Music";
  if($("welcomeMusic"))$("welcomeMusic").setAttribute("aria-pressed",String(musicOn));
- $("soundStatus").textContent=message||("Soundtrack "+on+" · "+(recordedCue==='travel'?trailPlaylist[trailTrackIndex].name:recordedCue?recordedTracks[recordedCue].name:soundtracks[currentCue].name));
+ $("soundStatus").textContent=message||(currentCue==='camp'?(nightTimer?"Night sounds · crickets and owls":"Camp · music paused")+" · music "+on.toLowerCase():"Soundtrack "+on+" · "+(recordedCue==='travel'?trailPlaylist[trailTrackIndex].name:recordedCue?recordedTracks[recordedCue].name:soundtracks[currentCue].name));
 }
 async function ensureAudio(){
  const C=window.AudioContext||window.webkitAudioContext;
@@ -1076,7 +1076,7 @@ async function toggleMusic(){
   await ensureAudio();musicOn=true;noteIndex=0;
   clearInterval(musicTimer);musicTimer=null;
   if(!startRecorded()&&currentCue!=='camp'){musicTick();musicTimer=setInterval(musicTick,soundtracks[currentCue].tempo)}
-  updateSoundUI("Playing: "+soundtracks[currentCue].name);
+  updateSoundUI();
  }catch(e){musicOn=false;updateSoundUI("Sound unavailable: "+e.message)}
 }
 async function testSound(){

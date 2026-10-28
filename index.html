@@ -218,6 +218,15 @@ body:has(#setup:not(.hidden)) #setup.setup-adventure{display:block!important;pos
 .setup-adventure .setup-intro>*{display:none!important}
 .setup-adventure .setup-card{position:relative;z-index:2;margin-top:0!important}
 @media(max-width:390px){.setup-adventure .setup-intro{flex-basis:125px!important;min-height:125px!important}}
+/* General store: let the document scroll on iPhone, rather than trapping
+   the bottom controls inside a fixed-height panel. */
+body:has(#store:not(.hidden)){height:auto!important;min-height:100dvh!important;overflow-y:auto!important;overflow-x:hidden!important}
+body:has(#store:not(.hidden)) main{height:auto!important;min-height:100dvh!important;overflow:visible!important;display:block!important}
+body:has(#store:not(.hidden)) #store:not(.hidden){height:auto!important;min-height:100dvh!important;display:block!important;overflow:visible!important;margin:0 auto!important;padding-bottom:max(100px,env(safe-area-inset-bottom))!important}
+body:has(#store:not(.hidden)) #storeItems{height:auto!important;max-height:none!important;min-height:0!important;overflow:visible!important}
+body:has(#store:not(.hidden)) #storeArt{height:150px!important;max-height:150px!important;width:100%!important;object-fit:cover!important}
+body:has(#store:not(.hidden)) #storeWeight{display:flex!important;flex-wrap:wrap!important;gap:8px!important}
+body:has(#store:not(.hidden)) #storeWeight>p{flex:1 1 100%!important;order:5!important;font-size:.83rem!important;line-height:1.4!important;margin:6px 0!important}
 /* Setup must use document scrolling on iPhone Safari, not a nested viewport
    trapped by the older fixed-height main and overflow rules. */
 body:has(#setup:not(.hidden)){height:auto!important;min-height:100dvh!important;overflow-y:auto!important;overflow-x:hidden!important}

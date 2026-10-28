@@ -1383,7 +1383,48 @@ function playTrailSound(kind){
 let nightTimer=null,nightToken=0,nightCount=0;
 function stopNightAmbient(){nightToken++;const wasPlaying=!!nightTimer;if(nightTimer)clearInterval(nightTimer);nightTimer=null;if(wasPlaying&&currentCue==='camp')updateSoundUI()}
 function startNightAmbient(){stopNightAmbient();const token=nightToken;ensureAudio().then(()=>{if(token!==nightToken||currentCue!=='camp')return;nightCount=0;nightTick();nightTimer=setInterval(nightTick,4000);updateSoundUI()}).catch(()=>{if(token===nightToken&&currentCue==='camp')updateSoundUI('Night sounds unavailable on this device.')})}
-function nightTick(){if(document.hidden||!audioCtx||!masterGain)return;try{const now=audioCtx.currentTime,owl=nightCount++%3===2;for(let i=0;i<(owl?2:4);i++){const osc=audioCtx.createOscillator(),gain=audioCtx.createGain(),t=now+i*(owl?.35:.12);osc.type='sine';osc.frequency.value=owl?(i?440:520):3800;gain.gain.setValueAtTime(0,t);gain.gain.linearRampToValueAtTime(owl?.035:.014,t+.025);gain.gain.exponentialRampToValueAtTime(.0001,t+(owl?.3:.08));osc.connect(gain).connect(masterGain);osc.start(t);osc.stop(t+(owl?.32:.09))}}catch(e){}}
+function nightTick(){
+ if(document.hidden||!audioCtx||!masterGain||currentCue!=='camp')return;
+ try{
+  const ctx=audioCtx,now=ctx.currentTime,n=nightCount++,rate=ctx.sampleRate;
+  // Four-second, low-pitched wind bed, softly swelling and fading.
+  const wind=ctx.createBuffer(1,Math.floor(rate*4),rate),wd=wind.getChannelData(0);
+  for(let i=0;i<wd.length;i++)wd[i]=(Math.random()*2-1)*.48;
+  const windSource=ctx.createBufferSource(),windFilter=ctx.createBiquadFilter(),windGain=ctx.createGain();
+  windSource.buffer=wind;windFilter.type='lowpass';windFilter.frequency.value=420;
+  windGain.gain.setValueAtTime(.001,now);windGain.gain.linearRampToValueAtTime(.17,now+.7);
+  windGain.gain.setValueAtTime(.17,now+2.9);windGain.gain.linearRampToValueAtTime(.001,now+3.95);
+  windSource.connect(windFilter).connect(windGain).connect(masterGain);windSource.start(now);windSource.stop(now+4);
+  // Fire crackles: short, irregular bursts of filtered noise.
+  const fire=ctx.createBuffer(1,Math.floor(rate*.085),rate),fd=fire.getChannelData(0);
+  for(let i=0;i<fd.length;i++)fd[i]=Math.random()*2-1;
+  for(let i=0;i<16;i++){
+   const t=now+.1+Math.random()*3.7,src=ctx.createBufferSource(),filter=ctx.createBiquadFilter(),gain=ctx.createGain();
+   src.buffer=fire;filter.type='highpass';filter.frequency.value=500+Math.random()*1300;
+   gain.gain.setValueAtTime(.001,t);gain.gain.linearRampToValueAtTime(.09+Math.random()*.17,t+.008);
+   gain.gain.exponentialRampToValueAtTime(.001,t+.075);
+   src.connect(filter).connect(gain).connect(masterGain);src.start(t);src.stop(t+.08);
+  }
+  // Chirping crickets in small alternating clusters.
+  for(let i=0;i<9;i++){
+   const t=now+.2+i*.38+Math.random()*.15,osc=ctx.createOscillator(),gain=ctx.createGain();
+   osc.type='sine';osc.frequency.value=2900+Math.random()*850;
+   gain.gain.setValueAtTime(.001,t);gain.gain.linearRampToValueAtTime(.085,t+.025);
+   gain.gain.setValueAtTime(.085,t+.095);gain.gain.exponentialRampToValueAtTime(.001,t+.17);
+   osc.connect(gain).connect(masterGain);osc.start(t);osc.stop(t+.18);
+  }
+  // A distant wolf howl occasionally, not on every cycle.
+  if(n>2&&Math.random()<.09){
+   const t=now+.3,osc=ctx.createOscillator(),gain=ctx.createGain(),filter=ctx.createBiquadFilter();
+   osc.type='sawtooth';osc.frequency.setValueAtTime(230,t);
+   osc.frequency.linearRampToValueAtTime(340,t+.9);osc.frequency.linearRampToValueAtTime(205,t+2.5);
+   filter.type='lowpass';filter.frequency.value=650;
+   gain.gain.setValueAtTime(.001,t);gain.gain.linearRampToValueAtTime(.075,t+.6);
+   gain.gain.setValueAtTime(.075,t+1.3);gain.gain.exponentialRampToValueAtTime(.001,t+2.6);
+   osc.connect(filter).connect(gain).connect(masterGain);osc.start(t);osc.stop(t+2.65);
+  }
+ }catch(e){}
+}
 function weatherSound(){const now=performance.now();if(now-lastStormSound>5000){lastStormSound=now;playTrailSound('rain')}}
 function musicTick(){
  if(!musicOn||!audioCtx)return;

@@ -1098,7 +1098,8 @@ function shopView(){
   const name=document.createElement("strong");name.textContent=g[1];
   const desc=document.createElement("small");desc.textContent=key==="parts"&&state.transport==="handcart"?"Repair supplies for a damaged handcart":shopDescriptions[key]||"Trail supplies";
   const cost=document.createElement("small");cost.textContent="$"+price+" · "+mass+" lbs cargo · Owned: "+(state[key]||0);
-  details.append(name,desc,cost);
+  const tradeoff=document.createElement('small');tradeoff.textContent=({food:'More meals, but heavy cargo.',parts:'Repair security now versus cash later.',medicine:'Illness protection at a cost.',ammo:'Needed for hunting.',clothing:'Warmth during cold weather.',fishingKit:'Reusable food-gathering tool.',oxen:'Pulling power at a high price.'}[key]||'');
+  details.append(name,desc,cost,tradeoff);
   const actions=document.createElement("div");actions.className="shop-actions";
   const quantity=document.createElement("div");quantity.className="shop-quantity";
   const minus=document.createElement("button");minus.textContent="−";minus.setAttribute("aria-label","Decrease "+g[1]+" quantity");

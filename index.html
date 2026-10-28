@@ -686,7 +686,12 @@ function drawWinterCamp(now){const c=state?.winterCamp;if(!c)return;const canvas
 function winterChapter(){beginWinterCamp()}
 
 function gainFood(amount){const actual=Math.max(0,Math.min(amount,capacity()-weight()));state.food+=actual;return Math.floor(actual)}
-function autosave(){try{localStorage.setItem(SAVE,JSON.stringify(state))}catch(e){}}
+function autosave(){if(!state)return false;try{localStorage.setItem(SAVE,JSON.stringify(state));return true}catch(e){return false}}
+// Preserve the current journey when mobile Safari is backgrounded or the page is closed.
+// This writes silently without adding a journal entry or interrupting gameplay.
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')autosave()});
+window.addEventListener('pagehide',autosave);
+
 function award(id){if(!state.badges.includes(id)){visualNotice={text:'Achievement · '+badgeNames[id].split(' — ')[0],until:performance.now()+4500};state.badges.push(id);log("Achievement unlocked: "+badgeNames[id]);try{const all=JSON.parse(localStorage.getItem(SAVE+"-badges")||"[]");localStorage.setItem(SAVE+"-badges",JSON.stringify([...new Set([...all,id])]))}catch(e){}}}
 const badgeNames={explorer:"Trail Explorer — visit five landmarks",neighbor:"Good Neighbor — help three families",hunter:"Prairie Provider — land three hunting hits",mechanic:"Trail Mechanic — repair your vehicle",arrival:"Valley Bound — reach the valley",together:"Together We Made It — arrive with everyone"};
 // Terrain and route choices are simplified game systems, not historical alternate roads.

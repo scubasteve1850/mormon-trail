@@ -218,6 +218,13 @@ body:has(#setup:not(.hidden)) #setup.setup-adventure{display:block!important;pos
 .setup-adventure .setup-intro>*{display:none!important}
 .setup-adventure .setup-card{position:relative;z-index:2;margin-top:0!important}
 @media(max-width:390px){.setup-adventure .setup-intro{flex-basis:125px!important;min-height:125px!important}}
+/* Setup must use document scrolling on iPhone Safari, not a nested viewport
+   trapped by the older fixed-height main and overflow rules. */
+body:has(#setup:not(.hidden)){height:auto!important;min-height:100dvh!important;overflow-y:auto!important;overflow-x:hidden!important}
+body:has(#setup:not(.hidden)) main{height:auto!important;min-height:100dvh!important;overflow:visible!important;display:block!important;padding:0!important}
+body:has(#setup:not(.hidden)) #setup.setup-adventure{display:block!important;height:auto!important;min-height:100dvh!important;overflow:visible!important}
+body:has(#setup:not(.hidden)) #setup .setup-shell{height:auto!important;min-height:100dvh!important;overflow:visible!important;padding-bottom:120px!important}
+body:has(#setup:not(.hidden)) #setup .setup-chapter{display:none!important}
 .setup-topbar{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .setup-adventure .setup-back{background:#122e35bf!important;border:1px solid #e7b96c!important;color:#fff3d5!important;box-shadow:none!important;border-radius:10px!important;min-height:38px!important;width:auto!important;padding:5px 12px!important;font-size:19px!important;font-weight:800!important}
 .setup-back span{font-size:12px;letter-spacing:.08em}

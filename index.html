@@ -1288,13 +1288,14 @@ const recordedTracks={
  title:{name:'Come, Come, Ye Saints',url:'https://binary-lookup.churchofjesuschrist.org/v1/assets/da7b733762af4ef874b7a25c250a085c3f0df7d6/default/default.mp3',rate:1.2},
  travel:{name:'Hope of Israel · instrumental',url:'https://broadcast.lds.org/churchmusic/MP3/1/1/nowords/259.mp3',rate:1},
  landmark:{name:'Pioneer Children Sang as They Walked',url:'https://media2.ldscdn.org/assets/music/childrens-songbook/2002-01-1840-pioneer-children-sang-as-they-walked-music-only-192k-eng.mp3',rate:1.2},
+ arrival:{name:'The Spirit of God · instrumental',url:'https://broadcast.lds.org/churchmusic/MP3/1/1/nowords/2.mp3',rate:1},
  memorial:{name:'God Be with You Till We Meet Again',url:'https://binary-lookup.churchofjesuschrist.org/v1/assets/821282e202f5b2b4e6a0c717a3994c8c32d11944/default/default.mp3',rate:1}
 };
 const trailPlaylist=[{name:'Frontier Piano Rag',url:'assets/audio/frontier-piano-rag.mp3',rate:1},{name:'Frontier Piano Rag · Encore',url:'assets/audio/frontier-piano-rag-encore.mp3',rate:1},{name:'Frontier Piano Rag · Original',url:'assets/audio/frontier-piano-rag-original.mp3',rate:1}];
 // Rotate existing recordings without repeating the track that just played.
 function nextTrailTrackIndex(previous){if(trailPlaylist.length<=1)return 0;const offset=1+Math.floor(Math.random()*(trailPlaylist.length-1));return (previous+offset)%trailPlaylist.length}
 let trailTrackIndex=Math.floor(Math.random()*trailPlaylist.length),recordedAudio=null,recordedCue=null,trailFailures=0,trailTrackOffset=0;
-function recordedTrackFor(cue){return cue==="title"||cue==="story"||cue==="store"?"title":cue==="landmark"?"landmark":(cue==="travel"||cue==="handcart")?"travel":cue==="memorial"?"memorial":null}
+function recordedTrackFor(cue){return cue==="title"||cue==="story"||cue==="store"?"title":cue==="landmark"?"landmark":(cue==="travel"||cue==="handcart")?"travel":cue==="memorial"?"memorial":cue==="arrival"?"arrival":null}
 function stopRecorded(preserve=true){if(recordedAudio){if(preserve&&recordedCue==='travel'&&Number.isFinite(recordedAudio.currentTime))trailTrackOffset=recordedAudio.currentTime;recordedAudio.pause();recordedAudio=null;recordedCue=null}}
 function startRecorded(){
  const key=recordedTrackFor(currentCue);
@@ -1331,7 +1332,7 @@ const soundtracks={
  camp:{name:"Evening Campfire · Reverie",tempo:390,notes:[60,64,67,64,62,65,69,65,64,67,72,67,62,64,60,null],chords:[[48,52,55],[53,57,60],[45,48,52],[55,59,62]],lead:"flute"},
  hunt:{name:"Prairie Chase · Adventure",tempo:170,notes:[72,72,67,69,72,74,76,74,72,69,67,69,72,67,64,67],chords:[[48,52,55],[55,59,62],[53,57,60],[55,59,62]],lead:"strings"},
  river:{name:"River Crossing · Suspense",tempo:280,notes:[62,65,69,68,62,65,70,69,65,64,62,null,58,62,65,null],chords:[[50,53,57],[46,50,53],[48,52,55],[50,53,57]],lead:"horn"},
- arrival:{name:"Valley Arrival · Triumph",tempo:330,notes:[60,64,67,72,71,69,67,69,72,76,79,76,72,67,72,null],chords:[[48,52,55],[53,57,60],[55,59,62],[48,52,55]],lead:"horn"}
+ arrival:{name:"The Spirit of God · arrival",tempo:330,notes:[60,64,67,72,71,69,67,69,72,76,79,76,72,67,72,null],chords:[[48,52,55],[53,57,60],[55,59,62],[48,52,55]],lead:"horn"}
 };
 function instrument(midi,start,duration,voice="horn",volume=.03){
  if(!audioCtx||midi==null)return;

@@ -785,6 +785,13 @@ function travel(days){if(pending)return;speechStarted=performance.now();motionUn
  if(state.transport==='wagon')state.oxStamina=clamp(state.oxStamina-(state.pace==='grueling'?6:state.pace==='restful'?2:4));const severeWeatherWear=state.weather==='Rainy'?4:trailClimate().snowCover?3:0;state.condition=Math.max(0,state.condition-terrain.wear-route.wear-severeWeatherWear-(state.pace==="grueling"?3:state.pace==="restful"?.5:1)-(state.weather==="Rainy"?1:0));
  state.health+=route.health;state.health+=state.pace==="grueling"?-3:state.pace==="restful"?1:0;
  state.health+=state.rations==="meager"?-3:state.rations==="filling"?1:0;
+// Sustained rationing has consequences beyond a single difficult day.
+// Restoring adequate meals gradually reverses the accumulated strain.
+state.meagerRationDays=state.rations==="meager"?Math.min(12,(state.meagerRationDays||0)+1):Math.max(0,(state.meagerRationDays||0)-(state.rations==="filling"?2:1));
+if(state.meagerRationDays===4||state.meagerRationDays===8){
+ state.morale=Math.max(0,state.morale-3);
+ log("Several days of small meals have left the family discouraged. Better rations will gradually ease the strain.");
+}
  
  state.morale+=state.rations==="meager"?-2:state.pace==="grueling"?-2:state.rations==="filling"?1:0;
  if(trailTemperature()>=85){state.health-=state.pace==='grueling'?3:1;state.morale-=1}if(state.weather==='Rainy')weatherSound();affectCompany();if(next&&state.miles>=next[1]){stop=next;state.morale+=8;log("Reached "+next[0]+".")}

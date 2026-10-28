@@ -1088,7 +1088,8 @@ function shopView(){
  drawStore();normalizeCompany();$("packingNote").replaceChildren();$("kitPreview").replaceChildren();renderKitOptions();
  const summary=$("storeSummary"),items=$("storeItems");
  $("storeGreeting").textContent="“Welcome, travelers! Stock your "+(state.transport==="handcart"?"handcart":"wagon")+" wisely—the trail is long.”";
- summary.textContent=state.captain+" · "+state.profession+" · "+state.wealth+" means · "+(state.transport==="handcart"?"Handcart":"Covered wagon")+" · "+state.company.map(p=>p.name).join(", ");summary.textContent+=' · Cash (btn=>{btn.classList.toggle("selected",btn.dataset.shop===activeShopCategory);btn.onclick=()=>{activeShopCategory=btn.dataset.shop;shopView()}});
+ summary.textContent=state.captain+" · "+state.profession+" · "+state.wealth+" means · "+(state.transport==="handcart"?"Handcart":"Covered wagon")+" · "+state.company.map(p=>p.name).join(", ");summary.textContent+=' · Cash $'+state.cash+' · Suggested reserve $40';
+ document.querySelectorAll("#storeCategories button").forEach(btn=>{btn.classList.toggle("selected",btn.dataset.shop===activeShopCategory);btn.onclick=()=>{activeShopCategory=btn.dataset.shop;shopView()}});
  items.replaceChildren();
  goods.filter(g=>(g[0]!=="oxen"||state.transport!=="handcart")&&(activeShopCategory==="all"||(activeShopCategory==="food"?g[0]==="food":activeShopCategory==="clothing"?g[0]==="clothing":!["food","clothing"].includes(g[0])))).forEach(g=>{
   const key=g[0],unit=key==="food"?25:key==="ammo"?20:1,price=storePrice(g),mass=g[3];

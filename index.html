@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
-<title>The Mormon Trail: Zion or Bust!</title><meta name="mormon-trail-build" content="trail-family-questions-131"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Mormon Trail"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="theme-color" content="#172e35"><link rel="apple-touch-icon" sizes="180x180" href="assets/mormon-trail-apple-touch-icon.png?v=111">
+<title>The Mormon Trail: Zion or Bust!</title><meta name="mormon-trail-build" content="trail-winter-rescue-132"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Mormon Trail"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="theme-color" content="#172e35"><link rel="apple-touch-icon" sizes="180x180" href="assets/mormon-trail-apple-touch-icon.png?v=111">
 <style>
 :root{font-family:"Courier New",monospace;color:#f2dfae;background:#181c18}*{box-sizing:border-box}body{margin:0;padding:20px}main{max-width:1000px;margin:auto}h1{text-align:center;color:#f4c66d;text-shadow:3px 3px #65462d;margin-bottom:4px}header p{text-align:center;margin-top:0;color:#c1bb9e}.panel{background:#252b22;border:3px solid #977b4a;box-shadow:5px 5px #111;padding:15px;margin:15px 0}button,select,input{font:inherit}button{background:#433b29;color:#ffe1a1;border:2px solid #c59e58;padding:10px;cursor:pointer;margin:3px}button:hover,button:focus{background:#695234}button:disabled{opacity:.35;cursor:default}input,select{background:#131a17;color:#fff0c7;border:1px solid #ab956d;padding:8px;max-width:100%}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.stat{background:#171d17;padding:10px;text-align:center}.stat strong{display:block;color:#ffdb88;font-size:1.15em}#scene{width:100%;height:auto;image-rendering:pixelated;border:3px solid #a78b5a;background:#80abc0}#log{max-height:210px;overflow:auto;line-height:1.6}#log p{border-bottom:1px dotted #665a43;padding-bottom:6px}#actions{display:flex;flex-wrap:wrap}small{color:#c2baa0}.hidden{display:none!important}#map{font-size:.85rem;color:#e6d3a5;line-height:1.6}@media(max-width:600px){body{padding:8px}.grid{grid-template-columns:repeat(2,1fr)}button{flex:1 1 42%}h1{font-size:1.6rem}#actions button{flex:1 1 42%}}
 #trailMap{width:100%;height:auto;image-rendering:pixelated;background:#d7bf88;border:2px solid #8c6e42}#mapLegend{font-size:.8rem;line-height:1.5}#actions{gap:6px}#actions button{min-height:44px}#game{overflow:hidden}#scene{max-height:350px}#storeItems button{min-width:75px}@media(max-width:600px){.panel{padding:12px;margin:10px 0}h2{font-size:1.25rem}#actions button{font-size:.9rem}#mapLegend{font-size:.7rem}} body{background:#121513;color:#f3e4b8;font-size:16px;padding:12px}main{max-width:850px}header{background:#111b1b;border:5px ridge #b19a63;padding:14px 8px;margin-bottom:10px}header h1{font-size:clamp(1.65rem,5vw,2.7rem);letter-spacing:.09em;color:#f6cf73;text-shadow:3px 3px #59391f}header p{font-size:.9rem;letter-spacing:.05em}.panel{background:#181f1d;border:4px ridge #b59a64;box-shadow:4px 4px #080a09;margin:10px 0;padding:15px}.panel h2{color:#f1c66c;text-transform:uppercase;letter-spacing:.04em}button{background:#15252a;color:#f5dca3;border:3px outset #b59b65;box-shadow:2px 2px #070a09;font-weight:bold;border-radius:0;min-height:43px}button:active{border-style:inset}input,select{border:2px inset #b39a69;background:#0c191c;border-radius:0}#scene{border:5px ridge #c2a675;background:#85b3c8;display:block}#stats{border:3px ridge #a68c5b;padding:6px;background:#101b1d}.stat{background:#1a2828;border:1px solid #4b625f}.stat strong{color:#f7c56a}.soundbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;background:#111d1e;border:3px ridge #a58c61;padding:8px;margin-bottom:10px}.soundbar label{display:flex;align-items:center;gap:6px}.soundbar input{width:85px;accent-color:#d6b169}.soundbar #soundStatus{font-size:.76rem;color:#d3c49c;flex:1 1 180px}#game>.panel:first-child{padding:8px;background:#172727}#actions button{flex:1 1 44%;text-align:center}summary{cursor:pointer;color:#f5d081}@media(max-width:600px){body{padding:6px}.panel{padding:10px}header{padding:10px 5px}header p{font-size:.75rem}#actions button{font-size:.88rem}} @media(max-width:700px){
@@ -447,6 +447,10 @@ body[data-game-tab=travel] #game #scene{flex-basis:21dvh;height:21dvh;max-height
  #travelPanel #trailMessages[open]>.trail-message-body{height:auto!important;max-height:calc(min(40dvh,340px) - 45px);overflow-y:auto!important}
  #travelPanel #trailMessages #log{min-height:80px}
 }
+/* V132: winter-rescue chapter imagery, accessible even in small standalone screens. */
+.rescue-chapter-note{font-weight:800;letter-spacing:.07em;color:#d9edff;background:#214b61;padding:8px;border-radius:9px;font-size:.78rem}
+.rescue-arrival-art{min-height:125px;border-radius:12px;border:1px solid #c1d6df;background:linear-gradient(180deg,#1c364b33,#182b3ca8),url('assets/handcart-rescue-v23.webp') center/cover;display:flex;align-items:end;justify-content:center;padding:10px;margin:5px 0 12px}
+.rescue-arrival-art strong{color:#fff7dc;text-shadow:0 2px 4px #17242b;background:#1b344bcc;border-radius:7px;padding:7px 10px}
 </style></head><body><main><header><h1>THE MORMON TRAIL</h1><p>✦ ZION OR BUST! ✦</p></header>
 <div class="soundbar"><button id="globalMusic" type="button">♪ Start Music</button><button id="soundTest" type="button">Test Sound</button><label>Volume <input id="volume" type="range" min="0" max="100" value="85"></label><span id="soundStatus" role="status">Music starts after tapping Play</span></div><section id="welcome" class="welcome-screen" aria-label="The Mormon Trail home screen">
  <div class="title-art-stage">
@@ -705,26 +709,40 @@ function continuousDailyUpdate(r){const alive=state.company.map((p,i)=>({p,i})).
 function pauseForCold(){stopContinuousTravel();show('Travel paused · cold exposure','Someone in the company is getting dangerously cold. Check the family or make sheltered camp before continuing.',[['Check family',()=>setTab('family')],['Sheltered rest',camp],['Continue on the trail',startContinuousTravel],['Stop and plan',controls]])}
 function startContinuousTravel(){if(!state||pending||continuousOwner)return;if(state.food<dailyFood()*3){pauseForLowProvisions();return}const owner=state;let latestReport=null,departed=false;continuousOwner=owner;motionUntil=Number.POSITIVE_INFINITY;function schedule(){if(continuousOwner!==owner||state!==owner)return;show('Traveling west',continuousDailyUpdate(latestReport)+'\nTap STOP to camp or make a new plan. Travel pauses automatically for major events.',[['🛑 STOP · Make camp / plan',()=>{stopContinuousTravel();controls()}]]);continuousTimer=setTimeout(step,!departed?9600:8800)}function step(){continuousTimer=null;if(continuousOwner!==owner||state!==owner)return;if(document.hidden){schedule();return}if(owner.food<dailyFood()*3){pauseForLowProvisions();return}const beforeDay=owner.day,priorConcerns=continuousConcerns();travel(1);if(owner.day>beforeDay)departed=true;if(state!==owner||owner.day===beforeDay||owner.activeLandmark||owner.activeRiver||owner.activeEncounter||owner.deathNotices?.length||owner.crossingPresentation||owner.winterCamp&&!owner.winterCamp.completed||owner.miles>=1300||owner.health<=0||owner.condition<=0){stopContinuousTravel();return}if(owner.coldWarning){pauseForCold();return}if(owner.food<dailyFood()*3){pauseForLowProvisions();return}const newConcerns=continuousConcerns().filter(key=>!priorConcerns.includes(key));if(newConcerns.length){pauseForTravelConcern(newConcerns);return}latestReport=owner.lastTravelReport;schedule()}schedule()}
 function presentHandcartRescue(){
- if(!state||!state.handcartRescuePending)return;
+ if(!state?.handcartRescuePending)return;
  stopContinuousTravel();pending=true;state.weather='Cold';
- show('1856 · Snow on the handcart trail','October brings a sudden storm across the Wyoming plains. Families are cold, food is scarce, and the handcarts struggle through snow. Relief wagons from the Salt Lake Valley have been sent east. This is a fictional encounter inspired by the Willie and Martin rescues.',[
- ['Share blankets and shelter with others',()=>resolveHandcartRescue('shelter')],
- ['Scout ahead for the relief wagons',()=>resolveHandcartRescue('scout')],
- ['Stay together and conserve strength',()=>resolveHandcartRescue('rest')]
+ show('1856 · The October storm','Snow whips across the Wyoming trail. The handcart wheels freeze in the ruts and exhausted families huddle beneath thin blankets. A relief party is on its way from Salt Lake City, but reaching shelter will take courage and care. This is a fictional scene inspired by the Willie and Martin handcart rescue.',[
+  ['🧣 Share blankets and build a shelter',()=>resolveHandcartRescue('shelter')],
+  ['🏔 Scout for the relief wagons',()=>resolveHandcartRescue('scout')],
+  ['🔥 Keep everyone together and rest',()=>resolveHandcartRescue('rest')]
  ]);
+ sceneMode='camp';draw(performance.now());
+ const note=document.createElement('p');note.className='rescue-chapter-note';note.textContent='❄ OCTOBER 1856 · WYOMING · RELIEF IS COMING';$('story').prepend(note);
 }
 function resolveHandcartRescue(action){
  if(!state?.handcartRescuePending)return;
+ const alive=state.company.filter(p=>p.alive),cold=alive.filter(p=>(p.warmth??100)<50).length;
+ const outcomes={
+  shelter:{food:50,clothing:2,morale:12,warmth:30,health:3,days:1,
+   text:'You stretch canvas over the handcarts and share precious blankets with nearby families. Through the snow, rescuers finally appear with wagons of food and warm clothing.'},
+  scout:{food:85,clothing:1,morale:8,warmth:14,health:-5,days:1,
+   text:'A small scouting party pushes through drifts and sees a rescue wagon crest the ridge. They guide the team back toward camp, but the bitter journey takes a toll.'},
+  rest:{food:65,clothing:2,morale:7,warmth:23,health:1,days:2,
+   text:'You shelter together, ration food carefully, and keep watch over those who are weakest. Relief wagons arrive after a difficult wait.'}
+ };
+ const result=outcomes[action]||outcomes.rest;
  state.handcartRescuePending=false;state.handcartRescued=true;pending=false;
- const outcomeText={
-  shelter:'Your family shares shelter and helps neighbors through the bitter night. A relief team reaches your camp with food and blankets.',
-  scout:'You help signal the approaching relief wagons. Exhausted travelers welcome their arrival and share the provisions.',
-  rest:'Your family gathers close and protects the weakest travelers. Relief wagons reach the camp with urgently needed supplies.'
- }[action]||'Help arrives.';
- state.food+=65;state.clothing+=2;state.morale=clamp(state.morale+9);
- state.company.filter(p=>p.alive).forEach(p=>p.warmth=clamp((p.warmth||50)+20));
- log('Handcart rescue: '+outcomeText);rememberJourney('rescue','Relief arrives in the snow',outcomeText);
- autosave();outcome('Relief in the snow',outcomeText+' The supplies add 65 lbs of food and two clothing bundles. The rescuers cannot erase the hardship already endured.');
+ advanceDays(result.days,'camp');
+ state.weather='Cold';state.food+=result.food;state.clothing+=result.clothing;
+ state.morale=clamp(state.morale+result.morale);
+ state.health=clamp(state.health+result.health);
+ alive.filter(p=>p.alive).forEach(p=>{p.warmth=clamp((p.warmth??50)+result.warmth);p.health=clamp(p.health+Math.max(0,result.health))});
+ const report=result.text+' The relief adds '+result.food+' lbs of food and '+result.clothing+' clothing bundle'+(result.clothing===1?'':'s')+'. '+(cold?'You remember how vulnerable the cold left the company. ':'')+'The hardships already endured still matter.';
+ log('1856 handcart rescue: '+report);rememberJourney('rescue','Relief wagons arrive',report);autosave();
+ outcome('🏕 Relief wagons arrive in the snow',report);
+ const image=document.createElement('div');image.className='rescue-arrival-art';image.setAttribute('role','img');image.setAttribute('aria-label','Rescuers bring supplies to a handcart company in the snow');
+ const text=document.createElement('strong');text.textContent='THE RESCUE · OCTOBER 1856';image.append(text);$('story').prepend(image);
+ sceneMode='camp';draw(performance.now());
 }
 function travel(days){if(pending)return;speechStarted=performance.now();motionUntil=speechStarted+12000;normalizeCompany();if(state.condition<=0){show("A wheel gives way","Your company must repair the "+(state.transport==="handcart"?"handcart":"wagon")+" before traveling.",[["Make repairs",repair],["Make Camp",camp]]);return}let stop=null,crossing=null,interrupted=false;const beginMiles=state.miles,beginDay=state.day,beginFood=state.food,beginHealth=state.health,beginCondition=state.condition;
  state.coldWarning=false;for(let i=0;i<days;i++){advanceDays(1,'travel');if(state.deathNotices?.length)break;

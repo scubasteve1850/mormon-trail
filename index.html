@@ -209,6 +209,15 @@ body:has(#setup:not(.hidden)) #setup.setup-adventure{display:block!important;pos
 .setup-adventure .setup-scene{position:fixed;pointer-events:none}
 .setup-scene{position:absolute;inset:0;background-image:linear-gradient(180deg,#0b203040 0%,#0a1e2477 38%,#0b1c20ec 65%,#08181cfb 100%),url("assets/title-screen.webp");background-position:center,center 42%;background-size:cover;filter:saturate(.9);pointer-events:none}
 .setup-shell{position:relative;z-index:1;height:100%;width:min(100%,540px);margin:auto;display:flex;flex-direction:column;padding:max(12px,env(safe-area-inset-top)) 17px max(12px,env(safe-area-inset-bottom));gap:0}
+/* Clean setup masthead: the artwork already contains the game logo.
+   Avoid drawing a second title over it, and reserve a predictable hero area. */
+.setup-adventure .setup-shell{margin:0 auto!important}
+.setup-adventure .setup-topbar{position:relative;z-index:2;padding:4px 0 0;min-height:45px}
+.setup-adventure .setup-chapter{background:#102b34c9;padding:7px 9px;border-radius:8px;text-align:right;max-width:54%;line-height:1.35}
+.setup-adventure .setup-intro{flex:0 0 148px!important;min-height:148px!important;margin:0!important;padding:0!important;pointer-events:none}
+.setup-adventure .setup-intro>*{display:none!important}
+.setup-adventure .setup-card{position:relative;z-index:2;margin-top:0!important}
+@media(max-width:390px){.setup-adventure .setup-intro{flex-basis:125px!important;min-height:125px!important}}
 .setup-topbar{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .setup-adventure .setup-back{background:#122e35bf!important;border:1px solid #e7b96c!important;color:#fff3d5!important;box-shadow:none!important;border-radius:10px!important;min-height:38px!important;width:auto!important;padding:5px 12px!important;font-size:19px!important;font-weight:800!important}
 .setup-back span{font-size:12px;letter-spacing:.08em}

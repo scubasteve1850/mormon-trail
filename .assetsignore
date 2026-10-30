@@ -1,0 +1,7 @@
+functions/
+worker.js
+wrangler.jsonc
+.assetsignore
+.git/
+tests/
+*.md
